@@ -93,6 +93,18 @@ namespace nl	{
 
 		updateWindowTitle();
 
+		// retrieve application options
+
+		Poco::Util::LayeredConfiguration& appConfig(SL_PROCESS_APP()->config());
+		SLAString numClients("");
+		try
+		{
+			numClients = appConfig.getString("clients");
+		}
+		catch (...)
+		{
+		}
+
 		// make this network state available
 		// for external access
 		setNetworkState(networkState);
@@ -105,6 +117,11 @@ namespace nl	{
 		if(content == nullptr)	{
 			// sample content creation
 			content = PluginLayerContent::create();
+		}
+		else	{
+			if(numClients.empty() == false)	{
+				content->setNumClients(CCString::create(numClients)->intValue());
+			}
 		}
 
 		SL_PROCESS_APP()->log(ELogType_Message, "created plugin layer content object(%s)", content->getClassName());

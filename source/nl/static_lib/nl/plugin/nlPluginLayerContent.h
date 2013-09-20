@@ -64,6 +64,7 @@ namespace nl	{
 		CC_SYNTHESIZE_RETAIN(CCString*, _rightLayerClassName, RightLayerClassName)
 
 		SL_SYNTHESIZE(ENetworkArchitecture, _networkArchitecture, NetworkArchitecture)
+		SL_SYNTHESIZE(int, _numClients, NumClients)
 
 		SL_SYNTHESIZE(bool, _pluginHasNetwork, PluginHasNetwork)
 		SL_SYNTHESIZE(bool, _pluginHasPhysics, PluginHasPhysics)

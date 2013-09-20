@@ -55,10 +55,11 @@ namespace nl	{
 
 	private:
 		void handleLib(const std::string& name, const std::string& value);
-		void handleClientsOption(const std::string& name, const std::string& value);
 		void handleHelp(const std::string& name, const std::string& value);
 		void handleDefine(const std::string& name, const std::string& value);
 		void handleConfig(const std::string& name, const std::string& value);
+		void handleClientsOnly(const std::string& name, const std::string& value);
+
 		void displayHelp();
 		void defineProperty(const std::string& def);
 		void printProperties(const std::string& base);

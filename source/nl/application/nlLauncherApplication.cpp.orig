@@ -102,11 +102,11 @@ namespace nl	{
 			.callback(OptionCallback<LauncherApplication>(this, &LauncherApplication::handleLib)));
 
 		options.addOption(
-			Option("clients", "c", "start <number> client peers")
+			Option("clients", "c", "start client peers only")
 			.required(false)
 			.repeatable(false)
-			.argument("number")
-			.callback(OptionCallback<LauncherApplication>(this, &LauncherApplication::handleClientsOption)));
+			.argument("fileName")
+			.callback(OptionCallback<LauncherApplication>(this, &LauncherApplication::handleClientsOnly)));
 
 /*
 		options.addOption(
@@ -191,10 +191,9 @@ namespace nl	{
 		_pluginLauncher->setLibName(value);
 	}
 
-	void LauncherApplication::handleClientsOption( const std::string& name, const std::string& value )
+	void LauncherApplication::handleClientsOnly( const std::string& name, const std::string& value )
 	{
-		Poco::Util::LayeredConfiguration& appConfig(config());
-		appConfig.setString("clients", value);
+		
 	}
 
 

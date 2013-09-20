@@ -45,6 +45,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     }
 	else	{
 	}
+	searchPaths.push_back("../cocos_data/resources/samples");
 	searchPaths.push_back("../data/resources");
 	searchPaths.push_back("../data/resources/nl");
 	pFileUtils->setSearchPaths(searchPaths);

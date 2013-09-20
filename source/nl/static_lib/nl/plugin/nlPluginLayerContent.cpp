@@ -31,6 +31,7 @@ namespace nl	{
 		,_networkArchitecture(ENetworkArchitecture_UNKNOWN)
 		,_pluginHasNetwork(false)
 		,_pluginHasPhysics(false)
+		,_numClients(-1)
 	{
 	}
 
