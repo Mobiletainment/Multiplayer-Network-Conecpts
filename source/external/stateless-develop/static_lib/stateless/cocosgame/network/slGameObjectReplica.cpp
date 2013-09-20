@@ -28,6 +28,9 @@ namespace sl	{
 		//       the replica manager to nullptr
 		//       to prevent any damage from calling the base class destructor
 		replicaManager = nullptr;
+		// in addition we set the network id manager to null
+		// see: NetworkIDObject::~NetworkIDObject
+		SetNetworkIDManager(nullptr);
 
 		if(false)
 		{
@@ -129,6 +132,10 @@ namespace sl	{
 
 				if (replicaManager)	{
 					replicaManager->Dereference(this);
+					// mimic the network id object destructor code
+					if(GetNetworkIDManager() != nullptr)	{
+						GetNetworkIDManager()->StopTrackingNetworkIDObject(this);
+					}
 					replicaManager = nullptr;
 				}
 
