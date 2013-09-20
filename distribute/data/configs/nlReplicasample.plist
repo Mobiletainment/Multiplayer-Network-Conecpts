@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"?>
+<plist version="1.0">
+    <dict>
+        <key>server_1</key>
+        <dict>
+            <key>serverip</key>
+            <string>127.0.0.1</string>
+            <key>advertise_system</key>
+            <false/>
+            <key>serverport</key>
+            <integer>60000</integer>
+            <key>clientport</key>
+            <integer>51000</integer>
+            <key>peertopeerport</key>
+            <integer>55000</integer>
+            <key>use_extension_packetlogger</key>
+            <false/>
+            <key>use_extension_fullyconnected_mesh</key>
+            <false/>
+            <key>use_extension_rpc4</key>
+            <false/>
+            <key>use_extension_replicamanager</key>
+            <true/>
+            <key>netsimulator_enable</key>
+            <false/>
+            <key>netsimulator_packet_loss</key>
+            <real>0.20000000</real>
+            <key>netsimulator_min_extra_ping</key>
+            <integer>50</integer>
+            <key>netsimulator_extra_ping packet_variance</key>
+            <integer>10</integer>
+            <key>connections</key>
+            <integer>2</integer>
+            <key>localip</key>
+            <string>127.0.0.1</string>
+        </dict>
+        <key>client_1</key>
+        <dict>
+            <key>serverip</key>
+            <string>127.0.0.1</string>
+            <key>advertise_system</key>
+            <false/>
+            <key>use_extension_packetlogger</key>
+            <false/>
+            <key>use_extension_fullyconnected_mesh</key>
+            <false/>
+            <key>use_extension_rpc4</key>
+            <false/>
+            <key>use_extension_replicamanager</key>
+            <true/>
+            <key>serverport</key>
+            <integer>60000</integer>
+            <key>peertopeerport</key>
+            <integer>55000</integer>
+            <key>clientport</key>
+            <integer>51000</integer>
+            <key>connections</key>
+            <integer>1</integer>
+            <key>localip</key>
+            <string>127.0.0.1</string>
+        </dict>
+        <key>client_2</key>
+        <dict>
+            <key>serverip</key>
+            <string>127.0.0.1</string>
+            <key>advertise_system</key>
+            <false/>
+            <key>serverport</key>
+            <integer>60000</integer>
+            <key>peertopeerport</key>
+            <integer>55000</integer>
+            <key>clientport</key>
+            <integer>51001</integer>
+            <key>connections</key>
+            <integer>1</integer>
+            <key>localip</key>
+            <string>10.201.97.60</string>
+            <key>use_extension_packetlogger</key>
+            <false/>
+            <key>use_extension_fullyconnected_mesh</key>
+            <false/>
+            <key>use_extension_rpc4</key>
+            <false/>
+            <key>use_extension_replicamanager</key>
+            <true/>
+            <key>netsimulator_enable</key>
+            <false/>
+            <key>netsimulator_packet_loss</key>
+            <real>0.20000000</real>
+            <key>netsimulator_min_extra_ping</key>
+            <integer>50</integer>
+            <key>netsimulator_extra_ping packet_variance</key>
+            <integer>10</integer>
+        </dict>
+        <key>client_3</key>
+        <dict>
+            <key>serverip</key>
+            <string>127.0.0.1</string>
+            <key>localip</key>
+            <string>&lt;unknown&gt;</string>
+            <key>connections</key>
+            <integer>0</integer>
+            <key>advertise_system</key>
+            <false/>
+            <key>use_extension_packetlogger</key>
+            <false/>
+            <key>use_extension_fullyconnected_mesh</key>
+            <false/>
+            <key>use_extension_rpc4</key>
+            <false/>
+            <key>use_extension_replicamanager</key>
+            <true/>
+            <key>serverport</key>
+            <integer>60000</integer>
+            <key>clientport</key>
+            <integer>51000</integer>
+            <key>peertopeerport</key>
+            <integer>55000</integer>
+        </dict>
+        <key>plugin_global_settings</key>
+        <dict>
+            <key>session_password</key>
+            <string>networklessons</string>
+            <key>physics_framerate</key>
+            <real>50.00000000</real>
+            <key>plugin_info_brief</key>
+            <string>basic raknet replica sample</string>
+            <key>plugin_info_detail</key>
+            <string>This sample features derivates of:
+- RakNet::ReplicaManager3
+- RakNet::Replica3
+- Connection_RM3
+
+It also features the usage of:
+RakNet::VariableDeltaSerializer
+</string>
+            <key>plugin_tasks</key>
+            <string>Implement a specific client replica.
+The requested functionality is:
+- created on a client
+- replicated to the server
+- not constructed on other clients
+- not replicated to other clients
+</string>
+            <key>plugin_task_hints</key>
+            <string>- read the related RakNet documentation
+- take a look at sl::AbstractReplica and the Query&lt;yxz&gt; implementation
+- instead of implementing a derivate try implementing a sl::ReplicationRule for nl::SampleReplica
+- read and debug the code
+
+ask us if you do not understand ...</string>
+        </dict>
+        <key>peerToPeer_1</key>
+        <dict>
+            <key>serverport</key>
+            <integer>60000</integer>
+            <key>serverip</key>
+            <string>127.0.0.1</string>
+            <key>clientport</key>
+            <integer>51000</integer>
+            <key>peertopeerport</key>
+            <integer>55000</integer>
+            <key>connections</key>
+            <integer>0</integer>
+            <key>advertise_system</key>
+            <false/>
+            <key>localip</key>
+            <string>10.201.97.60</string>
+            <key>use_extension_packetlogger</key>
+            <false/>
+            <key>use_extension_fullyconnected_mesh</key>
+            <false/>
+            <key>use_extension_rpc4</key>
+            <false/>
+            <key>use_extension_replicamanager</key>
+            <true/>
+            <key>netsimulator_enable</key>
+            <false/>
+            <key>netsimulator_packet_loss</key>
+            <real>0.20000000</real>
+            <key>netsimulator_min_extra_ping</key>
+            <integer>50</integer>
+            <key>netsimulator_extra_ping packet_variance</key>
+            <integer>10</integer>
+        </dict>
+        <key>peerToPeer_2</key>
+        <dict>
+            <key>serverport</key>
+            <integer>60000</integer>
+            <key>serverip</key>
+            <string>127.0.0.1</string>
+            <key>clientport</key>
+            <integer>51000</integer>
+            <key>connections</key>
+            <integer>0</integer>
+            <key>advertise_system</key>
+            <false/>
+            <key>peertopeerport</key>
+            <integer>55001</integer>
+            <key>localip</key>
+            <string>10.201.97.60</string>
+            <key>use_extension_packetlogger</key>
+            <false/>
+            <key>use_extension_fullyconnected_mesh</key>
+            <false/>
+            <key>use_extension_rpc4</key>
+            <false/>
+            <key>use_extension_replicamanager</key>
+            <true/>
+            <key>netsimulator_enable</key>
+            <false/>
+            <key>netsimulator_packet_loss</key>
+            <real>0.20000000</real>
+            <key>netsimulator_min_extra_ping</key>
+            <integer>50</integer>
+            <key>netsimulator_extra_ping packet_variance</key>
+            <integer>10</integer>
+        </dict>
+        <key>peerToPeer_3</key>
+        <dict>
+            <key>serverport</key>
+            <integer>60000</integer>
+            <key>serverip</key>
+            <string>127.0.0.1</string>
+            <key>clientport</key>
+            <integer>51000</integer>
+            <key>connections</key>
+            <integer>0</integer>
+            <key>advertise_system</key>
+            <false/>
+            <key>peertopeerport</key>
+            <integer>55002</integer>
+            <key>localip</key>
+            <string>10.201.97.60</string>
+            <key>use_extension_packetlogger</key>
+            <false/>
+            <key>use_extension_fullyconnected_mesh</key>
+            <false/>
+            <key>use_extension_rpc4</key>
+            <false/>
+            <key>use_extension_replicamanager</key>
+            <true/>
+            <key>netsimulator_enable</key>
+            <false/>
+            <key>netsimulator_packet_loss</key>
+            <real>0.20000000</real>
+            <key>netsimulator_min_extra_ping</key>
+            <integer>50</integer>
+            <key>netsimulator_extra_ping packet_variance</key>
+            <integer>10</integer>
+        </dict>
+        <key>peerToPeer_4</key>
+        <dict>
+            <key>serverport</key>
+            <integer>60000</integer>
+            <key>serverip</key>
+            <string>127.0.0.1</string>
+            <key>clientport</key>
+            <integer>51000</integer>
+            <key>connections</key>
+            <integer>0</integer>
+            <key>advertise_system</key>
+            <false/>
+            <key>peertopeerport</key>
+            <integer>55003</integer>
+            <key>localip</key>
+            <string>10.201.97.60</string>
+            <key>use_extension_packetlogger</key>
+            <false/>
+            <key>use_extension_fullyconnected_mesh</key>
+            <false/>
+            <key>use_extension_rpc4</key>
+            <false/>
+            <key>use_extension_replicamanager</key>
+            <true/>
+            <key>netsimulator_enable</key>
+            <false/>
+            <key>netsimulator_packet_loss</key>
+            <real>0.20000000</real>
+            <key>netsimulator_min_extra_ping</key>
+            <integer>50</integer>
+            <key>netsimulator_extra_ping packet_variance</key>
+            <integer>10</integer>
+        </dict>
+    </dict>
+</plist>

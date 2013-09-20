@@ -1,0 +1,65 @@
+
+
+Semesteraufgabe 2013-09
+
+Abgabe: bis 24.12.2013
+
+Anforderungen:
+- source code (der plugin source code - nicht der gesamte sourcecode)
+	- Es sollte nicht notwendig sein source code im folder
+		source/external
+		zu modifizieren.
+	  Wenn doch, dann mit entsprechender Erklärung, warum dies notwendig war.
+- release binaries
+- Dokumentation
+	Format: pdf (ähnlich einer Hausaufgabe)
+	Inhalt:
+		- Inhaltsverzeichnis
+		- Beschreibung der einzelnen Problemlösungen oder Problemlösungsansätze
+		- nicht mehr als 20 Seiten (exclusive Grafiken)
+
+-------------------------------------------------------------------------------		
+Aufgaben:		
+
+-----------------------------
+Erweiterung der Gameplayrules
+-----------------------------
+
+- add a player login with name and password (simple hash is enough)
+  hint: a derivate from Dialog centered above the GamplayLayer might do this job
+- add a persistent 'known player management' to the server
+	- where player properties are:
+		name
+		password
+		killcount
+		numberOfGamesPlayed
+		hint: PersistentDictionary
+- allow up to 16 players login to the game server simultaneously
+- only 4 players can play at one time / the rest become spectators
+- once one player dies the next spectator becomes a active player
+- the dead player becomes a spectator
+- add a 'kill' count for each player
+- add the 'kill-count' and the name of the active (not spectating) players to the client UI
+
+-----------------------------
+Replication
+-----------------------------
+
+- use compressed datagrams for transmitted state structures
+- do not continuously send projectile updates
+	- a projectile spawns with an initial position/orientation/velocity and lifetime
+		(that's it on the clientside)
+- implement client side interpolation
+- implement client side prediction for the controlling client
+- check if it is possible to implement server side lag compensation
+	- in case not : explain why
+	- in case : start implementing it and/or lineout what needs to be done to implement it
+- it might make sense to invent one additional replicated object called 'GameState'
+
+	
+-----------------------------
+Additional functionality (bonus points)
+-----------------------------
+
+- notify spectatores about how many rounds they have to wait
+- add chat functionality to the game	
