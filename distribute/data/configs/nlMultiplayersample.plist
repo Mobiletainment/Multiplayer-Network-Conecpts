@@ -56,7 +56,7 @@ ask us if you do not understand ...</string>
             <key>connections</key>
             <integer>2</integer>
             <key>localip</key>
-            <string>10.128.242.97</string>
+            <string>10.201.97.60</string>
         </dict>
         <key>client_1</key>
         <dict>
@@ -89,7 +89,7 @@ ask us if you do not understand ...</string>
             <key>connections</key>
             <integer>1</integer>
             <key>localip</key>
-            <string>10.128.242.97</string>
+            <string>10.201.97.60</string>
         </dict>
         <key>client_2</key>
         <dict>
@@ -114,7 +114,7 @@ ask us if you do not understand ...</string>
             <key>clientport</key>
             <integer>51001</integer>
             <key>localip</key>
-            <string>10.128.242.97</string>
+            <string>10.201.97.60</string>
         </dict>
         <key>client_3</key>
         <dict>

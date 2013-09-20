@@ -4,6 +4,7 @@
 *.slo
 *.lo
 *.o
+*.pdb
 
 # Compiled Dynamic libraries
 *.so

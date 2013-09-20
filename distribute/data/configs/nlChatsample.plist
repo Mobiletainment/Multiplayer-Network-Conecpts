@@ -84,14 +84,14 @@
             <false/>
             <key>send_auto_messages</key>
             <true/>
-            <key>localip</key>
-            <string>10.211.55.3</string>
             <key>serverport</key>
             <integer>60000</integer>
-            <key>clientport</key>
-            <integer>51000</integer>
             <key>peertopeerport</key>
             <integer>55000</integer>
+            <key>clientport</key>
+            <integer>51001</integer>
+            <key>localip</key>
+            <string>10.201.97.60</string>
         </dict>
         <key>client_3</key>
         <dict>
