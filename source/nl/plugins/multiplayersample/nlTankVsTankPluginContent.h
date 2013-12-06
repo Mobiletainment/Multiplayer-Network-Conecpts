@@ -50,6 +50,10 @@ namespace nl	{
 		TankVsTankGameplayLayer* addGameplayLayer(CCLayer* parentLayer);
 		void addGameContent( SLSize idx, PeerNode* peerNode, CCControlBase* parentLayer );
 		void addGameContentUI( SLSize idx, PeerNode* peerNode, TankVsTankGameplayLayer* parentLayer );
+		CC_SYNTHESIZE(CCControlEditBox*, _ctrlName, CtrlName)
+		CC_SYNTHESIZE(CCControlEditBox*, _ctrlPassword, CtrlPassword)
+		CC_SYNTHESIZE(CCControlEditBox*, _ctrlMessage, CtrlMessage)
+
 
 	private:
 

@@ -290,6 +290,15 @@ namespace nl	{
 			CCControlEventTouchUpInside);
 		ctrls->addObject(ctrlBtn);
 
+		if(peerNode->getPeer()->getTopology() == CLIENT)
+		{
+			_ctrlName = ControlUtils::createEditBox("Name:", ctrlsPreferredSize);
+			ctrls->addObject(_ctrlName);
+			_ctrlPassword = ControlUtils::createEditBox("Password:", ctrlsPreferredSize);
+			ctrls->addObject(_ctrlPassword);
+			_ctrlMessage = nl::ControlUtils::createEditBox("Message:", ctrlsPreferredSize);
+			ctrls->addObject(_ctrlMessage);
+		}
 
 		CCControlColumn* ctrlContainer = ControlUtils::createControlColumn(ctrls,ctrlsPreferredSize);
 		ctrlContainer->needsLayout();
