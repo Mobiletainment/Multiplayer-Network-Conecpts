@@ -55,6 +55,7 @@ namespace nl	{
 		getPeer()->log( ELogType_Info, "%s - received new incomming connection from %s with GUID %s", 
 			getClassName(),
 			peerWrapper->getSystemAddress().ToString(true), peerWrapper->getGUID().ToString());
+			
 	}
 
 	void TankVsTankClientLogicNode::onConnectionLost(PeerWrapper* peerWrapper)	{
@@ -78,6 +79,9 @@ namespace nl	{
 		// TODO @student : this is your entry point to let it all work
 
 		getPeer()->log(ELogType_Info, "%s - creating local player replica ...", getClassName());
+
+		
+
 		// we need the replica manager here
 		ReplicaManager* replicaManager(getPeer()->getReplicaManager());
 		if(replicaManager != nullptr)	{
@@ -91,8 +95,11 @@ namespace nl	{
 				// now we might want to set a little data to this replica ...
 				// like a name etc.
 				// or provide a construction dictionary
+				
 			}
 		}
+
+		
 	}
 
 	void TankVsTankClientLogicNode::onPeerConnectionAttemptFailed(PeerWrapper* peerWrapper)	{

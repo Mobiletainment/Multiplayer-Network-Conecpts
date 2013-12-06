@@ -106,8 +106,14 @@ namespace nl	{
 					getPeer()->log(ELogType_Info, "received json %s", json.c_str());
 					CCDictionary* dictionary = CCJSONConverter::dictionaryFrom(json.c_str());
 					getPeer()->log(ELogType_Info, dictionary);
-					// TODO: @student : read the relevant dictionary members and pass them to the chat message
-					ChatMessage chatMessage("---", json.c_str());
+					// DONE: @student : read the relevant dictionary members and pass them to the chat message
+					
+					CCObject *aMessage = dictionary->objectForKey("message");
+					CCDictionary *messDictionary = dynamic_cast<CCDictionary*>(aMessage);
+					const CCString *aSender = messDictionary->valueForKey("sender");
+					const CCString *aContent = messDictionary->valueForKey("content");
+					
+					ChatMessage chatMessage(aSender->getCString(), aContent->getCString());
 					addChatMessage(chatMessage);
 				}
 			}
@@ -162,7 +168,35 @@ namespace nl	{
 						HIGH_PRIORITY, RELIABLE_ORDERED, 0, nativePacket->systemAddress, true);
 				}
 			}
+			case NETMSG_ID_JSONOBJECT:
+			{
+				// TODO: @student : this might not be enough ...
+				const char* message = (const char*)nativePacket->data;
+				// skip the packet identifier
+				message++;
+				if(isEmptyString(message) == true)	{
+					getPeer()->log(ELogType_Error, "received an empty chat message");
+				}
+				else	{
+					SLAString json(message);
+					getPeer()->log(ELogType_Info, "received json %s", json.c_str());
+					CCDictionary* dictionary = CCJSONConverter::dictionaryFrom(json.c_str());
 
+					CCObject *aMessage = dictionary->objectForKey("message");
+					CCDictionary *messDictionary = dynamic_cast<CCDictionary*>(aMessage);
+					const CCString *aSender = messDictionary->valueForKey("sender");
+					const CCString *aContent = messDictionary->valueForKey("content");
+
+
+					getPeer()->log(ELogType_Info, dictionary);
+					// TODO: @student : read the relevant dictionary members and pass them to the chat message
+					ChatMessage chatMessage(aSender->getCString(), aContent->getCString());
+					addChatMessage(chatMessage);
+
+					getPeer()->accessRakNetPeer()->Send((const char*)nativePacket->data, nativePacket->length, 
+						HIGH_PRIORITY, RELIABLE_ORDERED, 0, nativePacket->systemAddress, true);
+				}
+			}
 			break;
 		default:
 			break;
@@ -314,8 +348,35 @@ namespace nl	{
 					getPeer()->log(ELogType_Message, "%s message is:%s", __FUNCTION__, editContent);
 
 					// we can now send this message ...
-					SLAString message(editContent);
-					this->sendChatLine(message);
+					//Security Checks
+					if (strlen(editContent) > 2000)
+					{
+						getPeer()->log(ELogType_Error, "ERROR text message is too long");
+					}
+					else if (strlen(editContent) == 0)
+					{
+						return;
+					}
+
+					CCDictionary* messageDictionary(CCDictionary::create());
+					CCDictionary* singleMessageDictionary(CCDictionary::create());
+					messageDictionary->setObject(singleMessageDictionary, "message");
+					singleMessageDictionary->setObject(CCString::create(editContent),"content");
+					singleMessageDictionary->setObject(CCString::create(_name),"sender");
+					CCString* json = CCJSONConverter::strFrom(messageDictionary);
+
+					const SLSize messageSize(2048);
+					char message[messageSize];
+
+					// zero out the data which have been send previously
+					memset(message,0,sizeof(char) * messageSize);
+					message[0] = (char)(NETMSG_ID_JSONOBJECT);
+					strcat(message, json->getCString());
+					sendData(message, (const int) strlen(message)+1);
+
+					//OLD: we can now send this message ...
+					//SLAString message(editContent);
+					//this->sendChatLine(message);
 
 					editBox->getTextField()->setString(nullptr);
 				}

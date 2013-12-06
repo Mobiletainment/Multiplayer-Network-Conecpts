@@ -164,6 +164,7 @@ namespace nl	{
 				nl::PeerNode* peerToPeerNode(nl::PeerToPeerNode::create());
 				twinLayer->addChild(peerToPeerNode);
 				peerToPeerNode->createPeerUI(leftLayer);
+				
 				peerNode = peerToPeerNode;
 			}
 			break;
@@ -174,6 +175,8 @@ namespace nl	{
 					nl::PeerNode* serverPeerNode(nl::ServerPeerNode::create());
 					twinLayer->addChild(serverPeerNode);
 					serverPeerNode->createPeerUI(leftLayer);
+					
+					
 					peerNode = serverPeerNode;
 
 					// now add some game logic to the server side
