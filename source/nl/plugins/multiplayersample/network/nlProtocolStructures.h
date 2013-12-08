@@ -29,6 +29,13 @@ namespace nl	{
 		SLSize _updateTick;
 	} ControllerValues;
 
+	typedef struct TCompressed_ControllerValues	{
+		char _leftRight;
+		char _forwardBackward;
+		char _shoot;
+		SLSize _updateTick;
+		RakNet::NetworkID _controlledReplicaNetworkId;
+	} Compressed_ControllerValues;
 
 	typedef struct TDynamic2DActorDatagram	{
 		float _x;
@@ -38,12 +45,13 @@ namespace nl	{
 		float _lvx;
 		float _lvy;
 		float _avz;
+		SLSize _updateTick;
 	} Dynamic2DActorDatagram;
 
 	// TODO @David: compressed structures implemented but not used yet
 	typedef struct TCompressedDynamic2DActorDatagram	{
-		float _x;
-		float _y;
+		short _x;
+		short _y;
 		float _lvx;
 		float _lvy;
 		SLSize _updateTick;

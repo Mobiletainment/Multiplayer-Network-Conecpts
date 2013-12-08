@@ -14,6 +14,7 @@
 #include "stdafx.h"
 #include "nlPlayerReplicaComponent.h"
 
+#include "slCompressed.h"
 namespace nl	{
 
 
@@ -72,7 +73,23 @@ namespace nl	{
 		// TODO @student : think about compression and implement a minimal version for these control values
 
 		RakNet::BitStream& bitStream(serializeParameters->outputBitstream[0]);
+
+		//OLD WAY:
 		bitStream.WriteAlignedBytes( (const unsigned char *)&_ctrlValues, sizeof(ControllerValues) );
+		//NEW
+		Compressed_ControllerValues comValues;
+		comValues._forwardBackward	=	TCompressedFixpoint<float,char,8>::writeCompress(_ctrlValues._forwardBackward	, -1.0f, 1.0f );
+		comValues._leftRight		=	TCompressedFixpoint<float,char,8>::writeCompress(_ctrlValues._leftRight			, -1.0f, 1.0f );
+		comValues._shoot			=	TCompressedFixpoint<float,char,8>::writeCompress(_ctrlValues._shoot				, -1.0f, 1.0f );
+		comValues._updateTick = _ctrlValues._updateTick;
+		comValues._controlledReplicaNetworkId = _ctrlValues._controlledReplicaNetworkId;
+		if(getTopology() == SERVER) 
+		{
+			//_replica.getPeer()->log(ELogType_Status, "Server %d", _ctrlValues._updateTick);
+
+		}
+		
+		bitStream.WriteAlignedBytes( (const unsigned char *)&comValues, sizeof(Compressed_ControllerValues));
 
 		return RakNet::RM3SR_SERIALIZED_ALWAYS;
 	}
@@ -83,7 +100,17 @@ namespace nl	{
 		if (bitStream.GetNumberOfBitsUsed()==0)	{
 			return;
 		}
-		bitStream.ReadAlignedBytes( (unsigned char *)&_ctrlValues, sizeof(ControllerValues) );
+		//NEW
+		Compressed_ControllerValues comValues;
+		bitStream.ReadAlignedBytes( (unsigned char *)&comValues, sizeof(Compressed_ControllerValues) );
+		
+		_ctrlValues._forwardBackward			=TCompressedFixpoint<float,char,8>::readInflate(comValues._forwardBackward				, -1.0f, 1.0f );
+		_ctrlValues._leftRight					=TCompressedFixpoint<float,char,8>::readInflate(comValues._leftRight					, -1.0f, 1.0f );
+		_ctrlValues._shoot						=TCompressedFixpoint<float,char,8>::readInflate(comValues._shoot						, -1.0f, 1.0f );
+		_ctrlValues._updateTick = comValues._updateTick;
+		_ctrlValues._controlledReplicaNetworkId =comValues._controlledReplicaNetworkId;
+		//OLD:
+		//bitStream.ReadAlignedBytes( (unsigned char *)&_ctrlValues, sizeof(ControllerValues) );
 #if 0
 		if(_ctrlValues._leftRight != 0.0f)	{
 		_replica.getPeer()->log(ELogType_Status, "lr(%.02f) fb(%.02f) fire(%.02f)", 
