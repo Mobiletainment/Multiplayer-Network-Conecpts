@@ -51,7 +51,7 @@ namespace nl	{
 		_player.accessController()->setActionValue(EControllerAction_Yaw, _ctrlValues._leftRight);
 		_player.accessController()->setActionValue(EControllerAction_Move, _ctrlValues._forwardBackward);
 		_player.accessController()->setActionValue(EControllerAction_Shoot, _ctrlValues._shoot);
-
+		
 		// TODO @student : the tank replica component property on the client is null
 		//                 you can replicate the played replica networkid (which is done anyways already)
 		//                 find the replica on the client side and let the client play
@@ -155,6 +155,7 @@ if(!isSpectatorMode())
 	void TankPlayerReplicaComponent::serializeConstruction(RakNet::BitStream *constructionBitstream)	{
 		// TODO: smth usefull
 		constructionBitstream->Write(_replica.getName().C_String());
+
 	}
 
 	bool TankPlayerReplicaComponent::deserializeConstruction(RakNet::BitStream *constructionBitstream)	{

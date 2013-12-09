@@ -147,6 +147,7 @@ namespace nl	{
 		getPeer()->log( ELogType_Info, "%s - received new incomming connection from %s with GUID %s", 
 			getClassName(),
 			peerWrapper->getSystemAddress().ToString(true), peerWrapper->getGUID().ToString());
+
 	}
 
 	void TankVsTankGameLogicNode::onConnectionLost(PeerWrapper* peerWrapper)	{
@@ -180,6 +181,7 @@ namespace nl	{
 		getPeer()->log(ELogType_Info, "%s - received peer will disconnect", getClassName());
 	}
 
+	
 
 	CCDictionary* TankVsTankGameLogicNode::createTankCreationDictionary()
 	{
@@ -229,7 +231,8 @@ namespace nl	{
 		constructionDictionary->setObject(CCFloat::create(position.x), "x");
 		constructionDictionary->setObject(CCFloat::create(position.y), "y");
 		constructionDictionary->setObject(CCInteger::create(SL_CID_TANK), "vehicleClassId");
-
+		//constructionDictionary->setObject(CCString::create("John"), "username");
+		
 		Vec3 vecPosition( position.x, position.y, 0.0f );
 		Vec3 vecForward( (Vec3(vecPosition) * -1.0).normalized() );
 

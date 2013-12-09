@@ -47,8 +47,9 @@ namespace nl	{
 		// postUpdate will always be called once per frame
 	}
 
-	void PlayerReplicaComponent::serializeConstruction(RakNet::BitStream *constructionBitstream)	{
-
+	void PlayerReplicaComponent::serializeConstruction(RakNet::BitStream *constructionBitstream)
+	{
+		
 	}
 
 	bool PlayerReplicaComponent::deserializeConstruction(RakNet::BitStream *constructionBitstream)	{
@@ -109,6 +110,7 @@ namespace nl	{
 		_ctrlValues._shoot						=TCompressedFixpoint<float,char,8>::readInflate(comValues._shoot						, -1.0f, 1.0f );
 		_ctrlValues._updateTick = comValues._updateTick;
 		_ctrlValues._controlledReplicaNetworkId =comValues._controlledReplicaNetworkId;
+		
 		//OLD:
 		//bitStream.ReadAlignedBytes( (unsigned char *)&_ctrlValues, sizeof(ControllerValues) );
 #if 0

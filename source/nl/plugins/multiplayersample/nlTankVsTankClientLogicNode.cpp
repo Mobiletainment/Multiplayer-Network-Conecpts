@@ -93,15 +93,38 @@ namespace nl	{
 				//DONE: @David we need the local player replica as we need to update it's update tick value once we've received the tankReplicaObject
 				GameObjectReplica *gameObjectReplica(dynamic_cast<GameObjectReplica*>(localPlayerReplica));
 				LocalPlayerReplicaComponent *replicaComponent(dynamic_cast<LocalPlayerReplicaComponent*>(gameObjectReplica->getReplicaComponent()));
+
+				//NEW @David: adding dictionary with username, but seems to have no effect
+				if (replicaComponent->getConstructionDictionary() == nullptr)
+				{
+					getPeer()->log(ELogType_Info, "is null :)");
+					CCDictionary* constructionDictionary(CCDictionary::create());
+					constructionDictionary->setObject(CCString::create("DavidUsernameGeht!"), "username");
+					replicaComponent->setConstructionDictionary(constructionDictionary);
+
+				}
+				else
+				{
+					getPeer()->log(ELogType_Info, "is not null ..");
+					replicaComponent->getConstructionDictionary()->setObject(CCString::create("John"), "username");
+				}
+
 				setLocalPlayerReplicaComponent(replicaComponent);
+				
 				// now we might want to set a little data to this replica ...
 				// like a name etc.
 				// or provide a construction dictionary
+				
 				
 			}
 		}
 
 		
+	}
+
+	void TankVsTankClientLogicNode::dispatchPacket(unsigned char packetIdentifier, NativePacket* nativePacket )
+	{
+		getPeer()->log(ELogType_Info, "DispatchPaket");
 	}
 
 	void TankVsTankClientLogicNode::onPeerConnectionAttemptFailed(PeerWrapper* peerWrapper)	{

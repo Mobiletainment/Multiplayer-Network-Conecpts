@@ -17,6 +17,7 @@ namespace nl	{
 
 	GameStateReplicaComponent::GameStateReplicaComponent()
 		:_num(0)
+		,_numConnections(0)
 		,_notificationConnectionLost(SL_NOTIFY_CONNECTION_LOST)
 		,_notificationConnectionDisconnected(SL_NOTIFY_DISCONNECTION)
 		,_notificationNewIncommingConnection(SL_NOTIFY_NEW_INCOMMING_CONNECTION)
@@ -113,7 +114,20 @@ namespace nl	{
 	}
 
 	void GameStateReplicaComponent::serializeConstruction(RakNet::BitStream *constructionBitstream)	{
+		CCDictionary* constructionDictionary(getConstructionDictionary());
+		if(constructionDictionary != nullptr)	{
+			// the vehicle position and orientation might have changed
+			// so we need to perform an update here
+			AbstractVehicle* vehicle(getActorSprite()->getVehicle());
+			if(vehicle != nullptr)	{
+				// TODO @student : modify the construction dictionary to spawn at the right place, with the right direction and right initial velocities
 
+			}
+			CCString* constructionJSON = CCJSONConverter::strFrom(constructionDictionary);
+			constructionBitstream->Write(constructionJSON->getCString());
+
+			getReplica()->getPeer()->log(ELogType_Info, "%s - Dictionary", constructionJSON->getCString());	
+		}
 	}
 
 	bool GameStateReplicaComponent::deserializeConstruction(RakNet::BitStream *constructionBitstream)	{

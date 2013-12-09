@@ -35,6 +35,7 @@ namespace nl	{
 		char _shoot;
 		SLSize _updateTick;
 		RakNet::NetworkID _controlledReplicaNetworkId;
+		char _Username;
 	} Compressed_ControllerValues;
 
 	typedef struct TDynamic2DActorDatagram	{

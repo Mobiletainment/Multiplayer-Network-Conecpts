@@ -9,7 +9,8 @@
 
 namespace nl	{
 
-	class GameStateReplicaComponent : public ReplicaComponent	{
+	class GameStateReplicaComponent : public ReplicaComponent
+	{
 		SL_DECLARE_BASE(ReplicaComponent)
 	public:
 		CREATE_FUNC(GameStateReplicaComponent)

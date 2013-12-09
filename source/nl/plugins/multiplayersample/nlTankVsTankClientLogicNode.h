@@ -47,7 +47,7 @@ namespace nl	{
 		virtual void onPeerWillDisconnect(PeerWrapper* peerWrapper) SL_OVERRIDE;
 
 
-
+		virtual void dispatchPacket(unsigned char packetIdentifier, NativePacket* nativePacket);
 
 		SL_SYNTHESIZE(GameplayLayer*, _gameplayLayer, GameplayLayer);
 		//DONE: @David

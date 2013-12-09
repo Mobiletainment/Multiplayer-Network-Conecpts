@@ -111,10 +111,13 @@ namespace nl	{
 			AbstractVehicle* vehicle(getActorSprite()->getVehicle());
 			if(vehicle != nullptr)	{
 				// TODO @student : modify the construction dictionary to spawn at the right place, with the right direction and right initial velocities
-
+				
 			}
 			CCString* constructionJSON = CCJSONConverter::strFrom(constructionDictionary);
 			constructionBitstream->Write(constructionJSON->getCString());
+
+			getReplica()->getPeer()->log(ELogType_Info, "%s - Dictionary", constructionJSON->getCString());	
+
 		}
 	}
 
