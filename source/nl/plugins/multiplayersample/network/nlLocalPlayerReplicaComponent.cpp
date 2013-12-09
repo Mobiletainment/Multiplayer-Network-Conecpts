@@ -18,6 +18,8 @@
 
 #include "nlReplicationRules.h"
 
+#include "../nlTankVsTankGameLogicNode.h"
+#include "../nlTankVsTankGameplayLayer.h"
 namespace nl	{
 
 
@@ -121,7 +123,44 @@ namespace nl	{
 
 	void LocalPlayerReplicaComponent::postUpdate( float delta ) 	{
 		// postUpdate will always be called once per frame
-
+		if(isActorNodeDestroyed())	{
+			// TODO @student : nothing todo here right ?
+			SL_PROCESS_APP()->log(ELogType_Info,"Test");
+		}
+		else	
+		{
+			if (getTopology()==CLIENT)	{
+			}
+			else if (getTopology()==SERVER)	{
+				TankPlayerReplicaComponent* tankPlayerReplicaComponent(getTankPlayerReplicaComponent());
+				TankReplicaComponent* tankReplicaComponent(tankPlayerReplicaComponent->getTankReplicaComponent());
+				GameActorNode* gameActorNode(tankPlayerReplicaComponent->getTankActorNode());
+				if(tankReplicaComponent != nullptr)	{
+					if(gameActorNode != nullptr)	{
+						if(gameActorNode->isDestroyed())	{
+							// player not destroyed
+							if(tankPlayerReplicaComponent->getActorNode()->isDestroyed() == false)	{
+								tankPlayerReplicaComponent->setTankActorNode(nullptr);
+								tankPlayerReplicaComponent->setTankReplicaComponent(nullptr);
+								SL_PROCESS_APP()->log(ELogType_Info,"Change Player");
+								TankVsTankGameplayLayer* tvtGameLayer(dynamic_cast<TankVsTankGameplayLayer*>(getGameplayLayer()) );
+								if(tvtGameLayer != nullptr)
+								{
+									TankVsTankGameLogicNode* test(dynamic_cast<TankVsTankGameLogicNode*>(getActorNode()->getParent()));
+									if(test != nullptr) 
+									{
+										SL_PROCESS_APP()->log(ELogType_Info,"WOO");
+									}
+									SL_PROCESS_APP()->log(ELogType_Info,"WOO");
+								}
+								tankPlayerReplicaComponent->setSpectatorMode(true);
+							}
+							_ctrlValues._controlledReplicaNetworkId = UNASSIGNED_NETWORK_ID;
+						}
+					}
+				}
+			}
+		}
 		SLBaseClass::postUpdate(delta);
 
 	}
@@ -168,6 +207,17 @@ namespace nl	{
 			/*
 			... insert missing code - smth essential is missing down below
 			*/
+			//getTank Player
+			TankPlayerReplicaComponent* tankPlayerReplicaComponent(getTankPlayerReplicaComponent());
+			if(tankPlayerReplicaComponent != nullptr)
+			{
+				tankPlayerReplicaComponent->getActorNode()->getActorNodeFlags().addFlag(EActorNodeFlag_IsDestroyed);
+				TankReplicaComponent* tankReplicaComponent(tankPlayerReplicaComponent->getTankReplicaComponent());
+				tankReplicaComponent->getActorNode()->getActorNodeFlags().addFlag((EActorNodeFlag_IsDestroyed));
+				tankPlayerReplicaComponent->setTankReplicaComponent(nullptr);
+				tankPlayerReplicaComponent->setTankActorNode(nullptr);
+			}
+			setTankPlayerReplicaComponent(nullptr);
 		}
 		return true;
 	}

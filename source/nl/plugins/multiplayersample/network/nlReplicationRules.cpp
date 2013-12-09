@@ -15,6 +15,7 @@
 #include "nlReplicationRules.h"
 
 #include "nlGameContentReplicaManager.h"
+#include "nlTankProjectileReplicaComponent.h"
 
 namespace nl	{
 

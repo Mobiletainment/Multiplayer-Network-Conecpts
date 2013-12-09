@@ -13,11 +13,14 @@
 
 #include "stdafx.h"
 #include "nlTankVsTankGameLogicNode.h"
+#include "network/GameStateReplicaComponent.h"
 
 namespace nl	{
 
 	TankVsTankGameLogicNode::TankVsTankGameLogicNode()
 		:_gameplayLayer(nullptr)
+		,_numConnections(0)
+		,_connectionList()
 	{
 	}
 
@@ -160,6 +163,9 @@ namespace nl	{
 
 	void TankVsTankGameLogicNode::onPeerIsConnected(PeerWrapper* peerWrapper)	{
 		getPeer()->log(ELogType_Info, "%s - received peer is connected", getClassName());
+
+		//DONE @David: creating gameStateReplica
+		getPeer()->getReplicaManager()->createReplica(GameStateReplicaComponent::staticClassName(),nullptr);
 	}
 
 	void TankVsTankGameLogicNode::onPeerConnectionAttemptFailed(PeerWrapper* peerWrapper)	{

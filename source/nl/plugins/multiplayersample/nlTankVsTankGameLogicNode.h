@@ -53,6 +53,11 @@ namespace nl	{
 
 
 		SL_SYNTHESIZE(GameplayLayer*, _gameplayLayer, GameplayLayer);
+		SL_SYNTHESIZE(int,_numConnections,NumberOfConnections); 
+
+
+		typedef std::vector<RakNet::RakNetGUID> GUIDVector;
+		SL_SYNTHESIZE(GUIDVector,_connectionList,GUIDVector); 
 	protected:
 		TankVsTankGameLogicNode();
 		virtual ~TankVsTankGameLogicNode();

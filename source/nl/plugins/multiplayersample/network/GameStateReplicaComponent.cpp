@@ -1,0 +1,147 @@
+
+
+#include "stdafx.h"
+#include "GameStateReplicaComponent.h"
+
+#include "nlGameContentReplicaManager.h"
+
+#include "nlReplicationRules.h"
+
+
+namespace nl	{
+
+
+	//-------------------------------------------------------------------------
+	// GameStateReplicaComponent
+	//-------------------------------------------------------------------------
+
+	GameStateReplicaComponent::GameStateReplicaComponent()
+		:_num(0)
+		,_notificationConnectionLost(SL_NOTIFY_CONNECTION_LOST)
+		,_notificationConnectionDisconnected(SL_NOTIFY_DISCONNECTION)
+		,_notificationNewIncommingConnection(SL_NOTIFY_NEW_INCOMMING_CONNECTION)
+	{
+		_replica.setName(GameStateReplicaComponent::staticClassName());
+		ServerAuthorityReplicationRule* replicationRule(ServerAuthorityReplicationRule::create());
+		replicationRule->_replica = getReplica();
+		_replica.setReplicationRule(replicationRule);
+
+		_notificationConnectionLost.addObserver(this, callfuncO_selector(GameStateReplicaComponent::onConnectionLostNotification));
+		_notificationConnectionDisconnected.addObserver(this, callfuncO_selector(GameStateReplicaComponent::onConnectionDisconnectedNotification));
+		_notificationNewIncommingConnection.addObserver(this, callfuncO_selector(GameStateReplicaComponent::onNewIncommingConnectionNotification));
+
+	}
+
+	GameStateReplicaComponent::~GameStateReplicaComponent()	{
+		_notificationConnectionLost.removeObserver();
+		_notificationConnectionDisconnected.removeObserver();
+		_notificationNewIncommingConnection.removeObserver();
+	}
+
+
+
+	void GameStateReplicaComponent::preUpdate( float delta ) 	{
+		SLBaseClass::preUpdate(delta);
+	}
+
+	void GameStateReplicaComponent::postUpdate( float delta ) 	{
+		SLBaseClass::postUpdate(delta);
+	}
+
+	void GameStateReplicaComponent::setPeer(Peer* peer) {
+		
+	}
+
+	void GameStateReplicaComponent::onNewIncommingConnectionNotification(CCObject* peerWrapperObject)
+	{
+		PeerWrapper* peerWrapper(dynamic_cast<PeerWrapper*>(peerWrapperObject));
+		if(peerWrapper != nullptr)	
+		{
+			if(getReplica()->getPeer() == peerWrapper->getPeer())	
+			{
+				if(_numConnections>=3)
+				{
+					getReplica()->getPeer()->accessRakNetPeer()->CloseConnection(peerWrapper->getGUID(), true);
+				}
+				else
+				{
+					_numConnections++;
+					_connectionList.push_back(peerWrapper->getGUID());
+				}
+			}
+		}
+	}
+
+	void GameStateReplicaComponent::onConnectionLostNotification(CCObject* peerWrapperObject)	
+	{
+		PeerWrapper* peerWrapper(dynamic_cast<PeerWrapper*>(peerWrapperObject));
+		if(peerWrapper != nullptr)	
+		{
+			if(getReplica()->getPeer() == peerWrapper->getPeer())	
+			{
+				for(int i = 0; i< _numConnections; i++)
+				{
+					if(_connectionList[i] == peerWrapper->getGUID())
+					{
+						_connectionList.erase(_connectionList.begin()+i);
+						_numConnections--;
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	void GameStateReplicaComponent::onConnectionDisconnectedNotification(CCObject* peerWrapperObject)	
+	{
+		PeerWrapper* peerWrapper(dynamic_cast<PeerWrapper*>(peerWrapperObject));
+		if(peerWrapper != nullptr)	
+		{
+			if(getReplica()->getPeer() == peerWrapper->getPeer())	
+			{
+				for(int i = 0; i< _numConnections; i++)
+				{
+					if(_connectionList[i] == peerWrapper->getGUID())
+					{
+						_connectionList.erase(_connectionList.begin()+i);
+						_numConnections--;
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	void GameStateReplicaComponent::serializeConstruction(RakNet::BitStream *constructionBitstream)	{
+
+	}
+
+	bool GameStateReplicaComponent::deserializeConstruction(RakNet::BitStream *constructionBitstream)	{
+		
+		return true;
+	}
+
+	void GameStateReplicaComponent::serializeDestruction(RakNet::BitStream *destructionBitstream)	{
+
+	}
+
+	bool GameStateReplicaComponent::deserializeDestruction(RakNet::BitStream *destructionBitstream)	{
+		
+		return true;
+	}
+
+	// client / authority code
+	void GameStateReplicaComponent::preSerialize()	{
+	}
+
+	// client / authority code
+	RakNet::RM3SerializationResult GameStateReplicaComponent::serialize(RakNet::SerializeParameters *serializeParameters)	{
+		return SLBaseClass::serialize(serializeParameters);
+	}
+
+	// server / receive code
+	void GameStateReplicaComponent::deserialize(RakNet::DeserializeParameters *deserializeParameters)	{
+		SLBaseClass::deserialize(deserializeParameters);
+	}
+
+}

@@ -21,6 +21,7 @@ namespace nl	{
 
 	TankVsTankClientLogicNode::TankVsTankClientLogicNode()
 		:_gameplayLayer(nullptr)
+		,_localPlayerReplica(nullptr)
 	{
 	}
 
@@ -63,7 +64,9 @@ namespace nl	{
 			getClassName(),
 			peerWrapper->getSystemAddress().ToString(true), peerWrapper->getGUID().ToString());
 
-		//setLocalPlayerReplicaComponent(nullptr);
+		//DONE @David
+		//now the object has been destroyed anyways
+		setLocalPlayerReplicaComponent(nullptr);
 	}
 
 	void TankVsTankClientLogicNode::onConnectionDisconnected(PeerWrapper* peerWrapper)	{
@@ -80,7 +83,6 @@ namespace nl	{
 
 		getPeer()->log(ELogType_Info, "%s - creating local player replica ...", getClassName());
 
-		
 
 		// we need the replica manager here
 		ReplicaManager* replicaManager(getPeer()->getReplicaManager());
@@ -88,10 +90,10 @@ namespace nl	{
 			// to create the local player replica
 			AbstractReplica* localPlayerReplica(replicaManager->createReplica(LocalPlayerReplicaComponent::staticClassName(), nullptr));
 			if(localPlayerReplica != nullptr)	{
-				//TODO: @David we need the local player replica as we need to update it's update tick value once we've received the tankReplicaObject
+				//DONE: @David we need the local player replica as we need to update it's update tick value once we've received the tankReplicaObject
 				GameObjectReplica *gameObjectReplica(dynamic_cast<GameObjectReplica*>(localPlayerReplica));
 				LocalPlayerReplicaComponent *replicaComponent(dynamic_cast<LocalPlayerReplicaComponent*>(gameObjectReplica->getReplicaComponent()));
-				//setLocalPlayerReplicaComponent(replicaComponent);
+				setLocalPlayerReplicaComponent(replicaComponent);
 				// now we might want to set a little data to this replica ...
 				// like a name etc.
 				// or provide a construction dictionary

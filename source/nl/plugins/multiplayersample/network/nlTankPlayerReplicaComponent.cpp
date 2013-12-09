@@ -28,6 +28,7 @@ namespace nl	{
 		:_tankReplicaComponent(nullptr)
 		,_tankActorNode(nullptr)
 		,_lastControlledReplicaNetworkId(RakNet::UNASSIGNED_NETWORK_ID)
+		,_isSpectator(false)
 	{
 		_replica.setName(TankPlayerReplicaComponent::staticClassName());
 
@@ -72,6 +73,7 @@ namespace nl	{
 					AbstractVehicle* vehicle(getTankReplicaComponent()->getActorSprite()->getVehicle());
 					if(vehicle != nullptr)	{
 						_player.play(vehicle);
+//						_ctrlValues._updateTick = vehicle->updateTicks();
 					}
 				}
 			}
@@ -83,6 +85,7 @@ namespace nl	{
 					AbstractVehicle* vehicle(getTankReplicaComponent()->getActorSprite()->getVehicle());
 					if(vehicle != nullptr)	{
 						_player.play(vehicle);
+						_ctrlValues._updateTick = vehicle->updateTicks();
 					}
 				}
 			}
@@ -114,7 +117,8 @@ namespace nl	{
 					}
 				}
 
-
+if(!isSpectatorMode()) 
+{
 				if(getTankReplicaComponent() == nullptr)	{
 
 					// TODO @student : create the server vehicle replica
@@ -141,6 +145,7 @@ namespace nl	{
 						}
 					}
 				}
+}
 			}
 		}
 

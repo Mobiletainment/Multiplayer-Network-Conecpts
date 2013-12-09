@@ -14,6 +14,7 @@
 #include "stdafx.h"
 #include "nlGameContentReplicaManager.h"
 
+#include "GameStateReplicaComponent.h"
 #include "nlPlayerReplicaComponent.h"
 #include "nlLocalPlayerReplicaComponent.h"
 #include "nlTankPlayerReplicaComponent.h"
@@ -23,6 +24,7 @@
 
 #include <stateless/cocosgame/slCocosGame.h>
 
+#include "slCompressed.h"
 namespace nl	{
 
 	//-------------------------------------------------------------------------
@@ -80,10 +82,13 @@ namespace nl	{
 #endif
 		ReplicaComponent* replicaComponent(nullptr);
 
-		// TODO: @student : create related replica components
-		/*
-		... insert missing code
-		*/
+		// Done: @David : create related replica components
+		if(typeName == GameStateReplicaComponent::staticClassName())
+		{
+			replicaComponent = GameStateReplicaComponent::create();
+			replica = replicaComponent->getReplica();
+		}		
+
 		if (typeName == LocalPlayerReplicaComponent::staticClassName())
 		{
 			replicaComponent = LocalPlayerReplicaComponent::create();
@@ -172,10 +177,8 @@ namespace nl	{
 		AbstractReplica* replica(nullptr);
 		RakNet::RakString typeName(classId);
 		ReplicaComponent* replicaComponent(nullptr);
+	
 		// DONE: By @David : create related replica component(s)
-		/*
-		... insert missing code
-		*/
 		if (typeName == LocalPlayerReplicaComponent::staticClassName())	{
 			replicaComponent = LocalPlayerReplicaComponent::create();
 		}
@@ -212,8 +215,15 @@ namespace nl	{
 		... insert missing code
 		*/
 		if (typeName == TankPlayerReplicaComponent::staticClassName())	{
+			
 			replicaComponent = TankPlayerReplicaComponent::create();
 		}
+		else if(typeName == GameStateReplicaComponent::staticClassName())
+		{
+			replicaComponent = GameStateReplicaComponent::create();
+		}
+
+
 		else if (typeName == TankProjectileReplicaComponent::staticClassName()) { 
 			replicaComponent = TankProjectileReplicaComponent::create();
 		}

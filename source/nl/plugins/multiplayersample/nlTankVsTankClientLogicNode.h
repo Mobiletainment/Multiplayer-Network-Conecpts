@@ -16,6 +16,7 @@
 #define __NLTANKVSTANKECLIENTLOGICNODE_H__
 
 #include <stateless/cocosgame/slCocosGame.h>
+#include "network/nlLocalPlayerReplicaComponent.h"
 
 namespace nl	{
 
@@ -49,8 +50,8 @@ namespace nl	{
 
 
 		SL_SYNTHESIZE(GameplayLayer*, _gameplayLayer, GameplayLayer);
-		//TODO: @David
-		//SL_SYNTHESIZE
+		//DONE: @David
+			SL_SYNTHESIZE_RETAIN(LocalPlayerReplicaComponent*, _localPlayerReplica, LocalPlayerReplicaComponent);
 	protected:
 		TankVsTankClientLogicNode();
 		virtual ~TankVsTankClientLogicNode();
