@@ -52,6 +52,7 @@ namespace nl	{
 
 		// DONE: @David : implement the right return value
 		//return SLBaseClass::queryConstruction(destinationConnection, replicaManager3);
+
 		return _replica->QueryConstruction_ServerConstruction(destinationConnection, getTopology() == SERVER );
 	}
 

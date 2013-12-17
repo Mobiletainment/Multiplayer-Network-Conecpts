@@ -18,6 +18,8 @@
 #include "nlTankVsTankGameLogicNode.h"
 #include "nlTankVsTankClientLogicNode.h"
 
+#include "nlChatNetPackageDispatcher.h"
+
 #include "components/slTankWeaponComponent.h"
 
 #include <stateless/cocosgame/slCocosGame.h>
@@ -170,14 +172,21 @@ namespace nl	{
 			break;
 		case ENetworkArchitecture_CLIENTSERVER:	
 			{
-				if(idx == 0)	{
+				// Kristian Added Start
+				PeerObserverNode* peerObserverNode(nullptr);
+				// Kristian Added End
+
+				if(idx == 0)
+				{
 					// the server
 					nl::PeerNode* serverPeerNode(nl::ServerPeerNode::create());
 					twinLayer->addChild(serverPeerNode);
 					serverPeerNode->createPeerUI(leftLayer);
-					
-					
 					peerNode = serverPeerNode;
+
+					// Kristian Added Start
+					ServerChatLogic::createForPeerNode(peerNode, rightLayer);
+					// Kristian Added End
 
 					// now add some game logic to the server side
 					TankVsTankGameLogicNode* gameLogicNode(TankVsTankGameLogicNode::create());
@@ -186,14 +195,19 @@ namespace nl	{
 					// the twin layer is the master to add the game logic node to
 					twinLayer->addChild(gameLogicNode);
 
-
 				}
-				else	{
+				else
+				{
 					// some clients
 					nl::PeerNode* clientPeerNode(nl::ClientPeerNode::create());
 					twinLayer->addChild(clientPeerNode);
 					clientPeerNode->createPeerUI(leftLayer);
 					peerNode = clientPeerNode;
+
+					// Kristian Added Start
+					ClientChatLogic::createForPeerNode(peerNode,rightLayer);
+					rightLayer->needsLayout();
+					// Kristian Added End
 
 					// now add some client logic to the client side
 					TankVsTankClientLogicNode* gameLogicNode(TankVsTankClientLogicNode::create());
