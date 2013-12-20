@@ -14,7 +14,7 @@
 #include "stdafx.h"
 #include "nlGameContentReplicaManager.h"
 
-#include "GameStateReplicaComponent.h"
+#include "nlGameStateReplicaComponent.h"
 #include "nlPlayerReplicaComponent.h"
 #include "nlLocalPlayerReplicaComponent.h"
 #include "nlTankPlayerReplicaComponent.h"
@@ -83,9 +83,9 @@ namespace nl	{
 		ReplicaComponent* replicaComponent(nullptr);
 
 		// Done: @David : create related replica components
-		if(typeName == GameStateReplicaComponent::staticClassName())
+		if(typeName == nlGameStateReplicaComponent::staticClassName())
 		{
-			replicaComponent = GameStateReplicaComponent::create();
+			replicaComponent = nlGameStateReplicaComponent::create();
 			replica = replicaComponent->getReplica();
 		}		
 
@@ -218,9 +218,9 @@ namespace nl	{
 			
 			replicaComponent = TankPlayerReplicaComponent::create();
 		}
-		else if(typeName == GameStateReplicaComponent::staticClassName())
+		else if(typeName == nlGameStateReplicaComponent::staticClassName())
 		{
-			replicaComponent = GameStateReplicaComponent::create();
+			replicaComponent = nlGameStateReplicaComponent::create();
 		}
 
 
