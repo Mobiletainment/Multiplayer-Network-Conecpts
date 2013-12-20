@@ -76,14 +76,16 @@ namespace nl	{
 		RakNet::BitStream& bitStream(serializeParameters->outputBitstream[0]);
 
 		//OLD WAY:
-		bitStream.WriteAlignedBytes( (const unsigned char *)&_ctrlValues, sizeof(ControllerValues) );
+		//bitStream.WriteAlignedBytes( (const unsigned char *)&_ctrlValues, sizeof(ControllerValues) );
 		//NEW
+		
 		Compressed_ControllerValues comValues;
 		comValues._forwardBackward	=	TCompressedFixpoint<float,char,8>::writeCompress(_ctrlValues._forwardBackward	, -1.0f, 1.0f );
 		comValues._leftRight		=	TCompressedFixpoint<float,char,8>::writeCompress(_ctrlValues._leftRight			, -1.0f, 1.0f );
 		comValues._shoot			=	TCompressedFixpoint<float,char,8>::writeCompress(_ctrlValues._shoot				, -1.0f, 1.0f );
 		comValues._updateTick = _ctrlValues._updateTick;
 		comValues._controlledReplicaNetworkId = _ctrlValues._controlledReplicaNetworkId;
+		
 		if(getTopology() == SERVER) 
 		{
 			//_replica.getPeer()->log(ELogType_Status, "Server %d", _ctrlValues._updateTick);
@@ -91,7 +93,7 @@ namespace nl	{
 		}
 		
 		bitStream.WriteAlignedBytes( (const unsigned char *)&comValues, sizeof(Compressed_ControllerValues));
-
+		
 		return RakNet::RM3SR_SERIALIZED_ALWAYS;
 	}
 
@@ -101,6 +103,7 @@ namespace nl	{
 		if (bitStream.GetNumberOfBitsUsed()==0)	{
 			return;
 		}
+		
 		//NEW
 		Compressed_ControllerValues comValues;
 		bitStream.ReadAlignedBytes( (unsigned char *)&comValues, sizeof(Compressed_ControllerValues) );
