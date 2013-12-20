@@ -21,8 +21,8 @@ namespace nl	{
 	{
 		_replica.setName(TankProjectileReplicaComponent::staticClassName());
 
-		_replicationTick.setAnimationFrequency(5);
-		_lifeTimeTick.setAnimationInterval(5);
+		_replicationTick.setAnimationFrequency(500);
+		_lifeTimeTick.setAnimationInterval(500);
 	}
 
 	TankProjectileReplicaComponent::~TankProjectileReplicaComponent()	{

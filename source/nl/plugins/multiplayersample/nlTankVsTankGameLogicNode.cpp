@@ -14,6 +14,7 @@
 #include "stdafx.h"
 #include "nlTankVsTankGameLogicNode.h"
 #include "network/nlGameStateReplicaComponent.h"
+#include "network/nlTankReplicaComponent.h"
 
 namespace nl	{
 
@@ -69,10 +70,11 @@ namespace nl	{
 					SLSize idx(0);
 					IComponent* component(components->componentAt(idx));
 					while(component != nullptr)	{
-						ReplicaComponent* replicaComponent(dynamic_cast<ReplicaComponent*>(component));
+						TankReplicaComponent* replicaComponent(dynamic_cast<TankReplicaComponent*>(component));
 						if(replicaComponent != nullptr)	{
 							replicaComponent->handleDestroyedActorNode();
 							replicaComponentFound = true;
+
 							break;
 						}
 						++idx;

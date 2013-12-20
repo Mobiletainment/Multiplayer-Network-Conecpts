@@ -32,6 +32,8 @@ namespace nl	{
 		virtual void preUpdate( float delta ) SL_OVERRIDE;
 		virtual void postUpdate( float delta ) SL_OVERRIDE;
 
+		SL_SYNTHESIZE_IS(bool, _isSpectator, SpectatorMode, SpectatorMode);
+
 	protected:
 		TankReplicaComponent();
 		virtual ~TankReplicaComponent();

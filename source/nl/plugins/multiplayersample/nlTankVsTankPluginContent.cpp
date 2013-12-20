@@ -166,7 +166,7 @@ namespace nl	{
 				nl::PeerNode* peerToPeerNode(nl::PeerToPeerNode::create());
 				twinLayer->addChild(peerToPeerNode);
 				peerToPeerNode->createPeerUI(leftLayer);
-				
+
 				peerNode = peerToPeerNode;
 			}
 			break;

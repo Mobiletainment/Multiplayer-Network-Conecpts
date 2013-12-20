@@ -10,6 +10,7 @@
 namespace nl	{
 
 	static size_t CONNECTION_LIMIT = 16;
+	static size_t PLAYER_LIMIT = 4;
 
 	class nlGameStateReplicaComponent : public ReplicaComponent
 	{
@@ -43,7 +44,8 @@ namespace nl	{
 
 		typedef std::vector<RakNet::RakNetGUID> GUIDVector;
 		SL_SYNTHESIZE(GUIDVector,_connectionList,GUIDVector);
-		SL_SYNTHESIZE(int,_connectionCount,ActiveConnectionCount); 
+		SL_SYNTHESIZE(int,_connectionCount,ActiveConnectionCount);
+		SL_SYNTHESIZE_IS(bool, _isSpectator, SpectatorMode, SpectatorMode);
 
 	protected:
 		nlGameStateReplicaComponent();

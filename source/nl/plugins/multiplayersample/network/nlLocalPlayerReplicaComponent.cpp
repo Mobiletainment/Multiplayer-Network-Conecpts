@@ -153,7 +153,7 @@ namespace nl	{
 									}
 									SL_PROCESS_APP()->log(ELogType_Info,"WOO");
 								}
-								tankPlayerReplicaComponent->setSpectatorMode(true);
+								//tankPlayerReplicaComponent->setSpectatorMode(true);
 							}
 							_ctrlValues._controlledReplicaNetworkId = UNASSIGNED_NETWORK_ID;
 						}

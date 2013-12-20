@@ -44,7 +44,7 @@ namespace nl	{
 
 		SL_SYNTHESIZE_RETAIN(TankReplicaComponent*, _tankReplicaComponent, TankReplicaComponent);
 		SL_SYNTHESIZE_RETAIN(GameActorNode*, _tankActorNode, TankActorNode);
-		SL_SYNTHESIZE_IS(bool,_isSpectator,SpectatorMode,SpectatorMode);
+		
 
 	protected:
 		TankPlayerReplicaComponent();

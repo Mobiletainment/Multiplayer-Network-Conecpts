@@ -211,11 +211,9 @@ namespace nl	{
 		RakNet::RakString typeName(classId);
 
 		// DONE: By @David : create related replica component(s)
-		/*
-		... insert missing code
-		*/
-		if (typeName == TankPlayerReplicaComponent::staticClassName())	{
-			
+		
+		if (typeName == TankPlayerReplicaComponent::staticClassName())
+		{	
 			replicaComponent = TankPlayerReplicaComponent::create();
 		}
 		else if(typeName == nlGameStateReplicaComponent::staticClassName())

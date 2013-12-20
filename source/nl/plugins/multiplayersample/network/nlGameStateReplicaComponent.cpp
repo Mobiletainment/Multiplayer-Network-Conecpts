@@ -12,7 +12,7 @@ namespace nl	{
 
 
 	//-------------------------------------------------------------------------
-	// LPGameStateReplicaComponent
+	// nlGameStateReplicaComponent
 	//-------------------------------------------------------------------------
 
 	nlGameStateReplicaComponent::nlGameStateReplicaComponent() : _connectionCount(0)
@@ -69,6 +69,8 @@ namespace nl	{
 				{
 					_connectionList.push_back(peerWrapper->getGUID()); //we maintain this connection ID in a list
 					_connectionCount++; //increase the active connection count
+					//if (_connectionCount > 1)
+						
 				}
 			}
 		}

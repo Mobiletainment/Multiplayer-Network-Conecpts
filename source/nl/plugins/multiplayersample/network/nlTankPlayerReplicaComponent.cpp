@@ -28,10 +28,9 @@ namespace nl	{
 		:_tankReplicaComponent(nullptr)
 		,_tankActorNode(nullptr)
 		,_lastControlledReplicaNetworkId(RakNet::UNASSIGNED_NETWORK_ID)
-		,_isSpectator(false)
 	{
 		_replica.setName(TankPlayerReplicaComponent::staticClassName());
-
+		
 		ServerAuthorityReplicationRule* replicationRule(ServerAuthorityReplicationRule::create());
 		replicationRule->_replica = getReplica();
 		_replica.setReplicationRule(replicationRule);
@@ -51,7 +50,7 @@ namespace nl	{
 		_player.accessController()->setActionValue(EControllerAction_Yaw, _ctrlValues._leftRight);
 		_player.accessController()->setActionValue(EControllerAction_Move, _ctrlValues._forwardBackward);
 		_player.accessController()->setActionValue(EControllerAction_Shoot, _ctrlValues._shoot);
-		
+
 		// TODO @student : the tank replica component property on the client is null
 		//                 you can replicate the played replica networkid (which is done anyways already)
 		//                 find the replica on the client side and let the client play
@@ -73,7 +72,7 @@ namespace nl	{
 					AbstractVehicle* vehicle(getTankReplicaComponent()->getActorSprite()->getVehicle());
 					if(vehicle != nullptr)	{
 						_player.play(vehicle);
-//						_ctrlValues._updateTick = vehicle->updateTicks();
+						_ctrlValues._updateTick = vehicle->updateTicks();
 					}
 				}
 			}
@@ -97,6 +96,7 @@ namespace nl	{
 	void TankPlayerReplicaComponent::postUpdate( float delta ) 	{
 		if(isActorNodeDestroyed())	{
 			// TODO @student : nothing todo here right ?
+			//setSpectatorMode(true);
 		}
 		else	{
 			if (getTopology()==CLIENT)	{
@@ -117,35 +117,35 @@ namespace nl	{
 					}
 				}
 
-if(!isSpectatorMode()) 
-{
-				if(getTankReplicaComponent() == nullptr)	{
+//				if(!isSpectatorMode()) 
+				{
+					if(getTankReplicaComponent() == nullptr)	{
 
-					// TODO @student : create the server vehicle replica
+						// TODO @student : create the server vehicle replica
 
-					// we need the replica manager here
-					ReplicaManager* replicaManager(getReplicaManager());
-					if(replicaManager != nullptr)	{
+						// we need the replica manager here
+						ReplicaManager* replicaManager(getReplicaManager());
+						if(replicaManager != nullptr)	{
 
-						// to create the local player replica
-						CCDictionary* constructionDictionary(TankVsTankGameLogicNode::createTankCreationDictionary());
+							// to create the local player replica
+							CCDictionary* constructionDictionary(TankVsTankGameLogicNode::createTankCreationDictionary());
 
-						GameObjectReplica* vehicleReplica(dynamic_cast<GameObjectReplica*>(replicaManager->createReplica(TankReplicaComponent::staticClassName(), constructionDictionary)));
-						if(vehicleReplica != nullptr)	{
-							// note: now we need to connect this vehicle with some form of controller
-							TankReplicaComponent* tankReplicaComponent(dynamic_cast<TankReplicaComponent*>(vehicleReplica->getReplicaComponent()));
-							setTankReplicaComponent(tankReplicaComponent);
-							setTankActorNode(tankReplicaComponent->getGameActorNode());
+							GameObjectReplica* vehicleReplica(dynamic_cast<GameObjectReplica*>(replicaManager->createReplica(TankReplicaComponent::staticClassName(), constructionDictionary)));
+							if(vehicleReplica != nullptr)	{
+								// note: now we need to connect this vehicle with some form of controller
+								TankReplicaComponent* tankReplicaComponent(dynamic_cast<TankReplicaComponent*>(vehicleReplica->getReplicaComponent()));
+								setTankReplicaComponent(tankReplicaComponent);
+								setTankActorNode(tankReplicaComponent->getGameActorNode());
 
-							_ctrlValues._controlledReplicaNetworkId = vehicleReplica->GetNetworkID();
+								_ctrlValues._controlledReplicaNetworkId = vehicleReplica->GetNetworkID();
 
-							_replica.getPeer()->log(ELogType_Message, 
-								"%s created a player tank object with networkId %d",
-								getClassName(), _ctrlValues._controlledReplicaNetworkId);
+								_replica.getPeer()->log(ELogType_Message, 
+									"%s created a player tank object with networkId %d",
+									getClassName(), _ctrlValues._controlledReplicaNetworkId);
+							}
 						}
 					}
 				}
-}
 			}
 		}
 
