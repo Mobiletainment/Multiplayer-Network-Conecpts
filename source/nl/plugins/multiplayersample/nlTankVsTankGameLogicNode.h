@@ -16,10 +16,11 @@
 #define __NLTANKVSTANKEGAMELOGICNODE_H__
 
 #include <stateless/cocosgame/slCocosGame.h>
+#include "network/nlTankPlayerReplicaComponent.h"
 
 namespace nl	{
 
-	static size_t PLAYER_LIMIT = 4;
+	static size_t PLAYER_LIMIT = 2;
 
 	class TankVsTankGameLogicNode : public PeerObserverNode	{
 		SL_DECLARE_BASE(PeerObserverNode)
@@ -45,6 +46,9 @@ namespace nl	{
 		virtual void onPeerFailedToConnect(PeerWrapper* peerWrapper) SL_OVERRIDE;
 		virtual void onPeerWillDisconnect(PeerWrapper* peerWrapper) SL_OVERRIDE;
 
+		// new by David
+		TankPlayerReplicaComponent* getTankPlayerReplicaComponentFromActorNode(ActorNode *actorNode);
+
 		static CCDictionary* createTankCreationDictionary();
 
 		static 	CCDictionary* createTankCreationDictionary( 
@@ -59,7 +63,8 @@ namespace nl	{
 		virtual ~TankVsTankGameLogicNode();
 
 		DataStructures::List<Replica3*> _destructionReplicaList;
-
+		//SL_SYNTHESIZE(CCArray*, _spectators, Spectators);
+		CCArray *_spectators;
 
 	private:
 

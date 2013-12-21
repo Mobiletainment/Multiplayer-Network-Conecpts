@@ -15,13 +15,15 @@
 #include "nlTankVsTankGameLogicNode.h"
 #include "network/nlGameStateReplicaComponent.h"
 #include "network/nlTankReplicaComponent.h"
-#include "network/nlTankPlayerReplicaComponent.h"
+
 
 namespace nl	{
 
 	TankVsTankGameLogicNode::TankVsTankGameLogicNode()
 		:_gameplayLayer(nullptr)
 	{
+		//int max = _spectators->count();
+
 	}
 
 	TankVsTankGameLogicNode::~TankVsTankGameLogicNode()
@@ -31,6 +33,7 @@ namespace nl	{
 	bool TankVsTankGameLogicNode::init()	{
 		bool initialized(SLBaseClass::init());
 
+		_spectators = new CCArray();
 
 		return initialized;
 	}
@@ -49,6 +52,8 @@ namespace nl	{
 			// iterate over all children and check if Actors are destroyed
 
 			size_t activePlayers = 0; //count how many active players we have
+			size_t dyingPlayers = 0;
+			
 
 			CCArray* destroyedChildren(CCArray::create());
 			CCObject* child = nullptr;
@@ -57,32 +62,55 @@ namespace nl	{
 				GameActorNode* actorNode(dynamic_cast<GameActorNode*>(child));
 				if(actorNode != nullptr)
 				{
-					// find the TankPlayerReplica component by iterating over all components of the GameActor until we find it
-					ComponentArray* components(actorNode->getComponents());
-					SLSize idx(0);
-					IComponent* component(components->componentAt(idx));
-					while(component != nullptr)
+					if(actorNode->isDestroyed())
 					{
-						TankPlayerReplicaComponent* replicaComponent(dynamic_cast<TankPlayerReplicaComponent*>(component));
+						destroyedChildren->addObject(actorNode);
+						++dyingPlayers;
+						TankPlayerReplicaComponent* replicaComponent = getTankPlayerReplicaComponentFromActorNode(actorNode);
+					}
+					else
+					{
+						// find the TankPlayerReplica component by iterating over all components of the GameActor until we find it
+						TankPlayerReplicaComponent* replicaComponent = getTankPlayerReplicaComponentFromActorNode(actorNode);
+						
 						if(replicaComponent != nullptr)
 						{
+							//if we already have <4> active players, set the player to spectator mode
+							if (activePlayers >= PLAYER_LIMIT)
+								replicaComponent->setSpectatorMode(true);
+
 							if (replicaComponent->isSpectatorMode() == false)
-								++activePlayers; //count the player as active player
-
-							if (activePlayers > PLAYER_LIMIT)
-								replicaComponent->setSpectatorMode(true); //if we already have <4> active players, set the player to spectator mode
-							break;
+								++activePlayers; //if the player isn't in spectator mode, count as active player
+							else
+							{
+								if (_spectators->indexOfObject(replicaComponent) == UINT_MAX)
+									_spectators->addObject(replicaComponent); //add the spectator to the list so we can disable spectator mode it if not enough active players are playing
+							}
 						}
-						++idx;
-						component = components->componentAt(idx);
-					}
-
-
-					if(actorNode->isDestroyed())	{
-						destroyedChildren->addObject(actorNode);
 					}
 				}
 			}
+
+			int activatePlayers = (int)PLAYER_LIMIT - activePlayers;
+
+			for (int i = 0; i < activatePlayers; i++)
+			{
+				if (i < _spectators->count())
+				{
+					TankPlayerReplicaComponent* playerReplica(dynamic_cast<TankPlayerReplicaComponent*>(_spectators->objectAtIndex(i)));
+					getPeer()->log(ELogType_Info, "Replica index: %i", playerReplica->idx());
+					playerReplica->setSpectatorMode(false);
+				}
+			}
+
+			for (int i = 0; i < activatePlayers; i++)
+			{
+				if (i < _spectators->count())
+				{
+					_spectators->removeObjectAtIndex(0);
+				}
+			}
+
 
 			CCARRAY_FOREACH(destroyedChildren, child)
 			{
@@ -160,6 +188,25 @@ namespace nl	{
 		}
 	}
 
+	TankPlayerReplicaComponent* TankVsTankGameLogicNode::getTankPlayerReplicaComponentFromActorNode(ActorNode *actorNode)
+	{
+		// find the TankPlayerReplica component by iterating over all components of the GameActor until we find it
+		ComponentArray* components(actorNode->getComponents());
+		SLSize idx(0);
+		IComponent* component(components->componentAt(idx));
+		while(component != nullptr)
+		{
+			TankPlayerReplicaComponent* replicaComponent(dynamic_cast<TankPlayerReplicaComponent*>(component));
+
+			if(replicaComponent != nullptr)
+			{
+				return replicaComponent;
+			}
+			++idx;
+			component = components->componentAt(idx);
+		}
+	}
+
 	void TankVsTankGameLogicNode::onEnter()	{
 		SLBaseClass::onEnter();
 	}
@@ -208,7 +255,7 @@ namespace nl	{
 		getPeer()->log(ELogType_Info, "%s - received peer will disconnect", getClassName());
 	}
 
-	
+
 
 	CCDictionary* TankVsTankGameLogicNode::createTankCreationDictionary()
 	{
@@ -259,7 +306,7 @@ namespace nl	{
 		constructionDictionary->setObject(CCFloat::create(position.y), "y");
 		constructionDictionary->setObject(CCInteger::create(SL_CID_TANK), "vehicleClassId");
 		//constructionDictionary->setObject(CCString::create("John"), "username");
-		
+
 		Vec3 vecPosition( position.x, position.y, 0.0f );
 		Vec3 vecForward( (Vec3(vecPosition) * -1.0).normalized() );
 
