@@ -31,10 +31,13 @@ namespace nl	{
 
 		virtual void preUpdate( float delta ) SL_OVERRIDE;
 		virtual void postUpdate( float delta ) SL_OVERRIDE;
+		void increaseKillCount();
 
 	protected:
 		TankReplicaComponent();
 		virtual ~TankReplicaComponent();
+		CCLabelTTF* _labelKillCount;
+		SL_SYNTHESIZE(int, _killCount, KillCount)
 
 	private:
 	};

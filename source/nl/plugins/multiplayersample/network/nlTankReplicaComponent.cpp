@@ -17,6 +17,8 @@
 
 namespace nl	{
 	TankReplicaComponent::TankReplicaComponent()
+	: _labelKillCount(nullptr)
+	, _killCount(0)
 	{
 		_replica.setName(TankReplicaComponent::staticClassName());
 		_replicationTick.setAnimationFrequency(5);
@@ -29,10 +31,34 @@ namespace nl	{
 	void TankReplicaComponent::preUpdate( float delta ) 	{
 		ActorSprite* actorSprite(getActorSprite());
 		if(actorSprite != nullptr)	{
+
+			if (_labelKillCount == nullptr) //if the kill-count label hasn't been created yet, create it
+			{
+				_labelKillCount = dynamic_cast<CCLabelTTF*>( ControlUtils::createLabel("Killcount: 0", kCCTextAlignmentLeft) );
+				_labelKillCount->setAnchorPoint(ccp(0.5f, 0.5f));
+				CCPoint labelPosition(0, 0);
+				_labelKillCount->setPosition(labelPosition);
+				_labelKillCount->setVisible(true);
+
+				actorSprite->addChild(_labelKillCount);
+			}
+
+			//Update the kill-count label to displyy the current kill-count
+			_labelKillCount->setString(CCString::createWithFormat("Killcount: %i", getKillCount())->getCString());
+
+			//maintain readability of the kill-count label by keeping it's direction horizontal when rotating the tank
+			_labelKillCount->setRotation(360 - actorSprite->getRotation());
+
+
 			actorSprite->getActorFlags().removeFlag(EActorFlag_DrawVehicle);
 			actorSprite->getActorFlags().addFlag(EActorFlag_IsTank);
 		}
 		SLBaseClass::preUpdate(delta);
+	}
+
+	void TankReplicaComponent::increaseKillCount()
+	{
+		++_killCount;
 	}
 
 	void TankReplicaComponent::postUpdate( float delta ) 	{

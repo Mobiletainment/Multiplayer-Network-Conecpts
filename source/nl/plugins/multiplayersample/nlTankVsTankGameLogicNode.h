@@ -17,6 +17,7 @@
 
 #include <stateless/cocosgame/slCocosGame.h>
 #include "network/nlTankPlayerReplicaComponent.h"
+#include "network/nlTankReplicaComponent.h"
 
 namespace nl	{
 
@@ -49,6 +50,8 @@ namespace nl	{
 
 		// new by David
 		TankPlayerReplicaComponent* getTankPlayerReplicaComponentFromActorNode(ActorNode *actorNode);
+		TankReplicaComponent* getTankReplicaComponentFromActorNode(ActorNode *actorNode);
+
 
 		static CCDictionary* createTankCreationDictionary();
 

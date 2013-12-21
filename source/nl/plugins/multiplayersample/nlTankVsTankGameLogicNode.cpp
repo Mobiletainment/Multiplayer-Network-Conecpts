@@ -14,7 +14,6 @@
 #include "stdafx.h"
 #include "nlTankVsTankGameLogicNode.h"
 #include "network/nlGameStateReplicaComponent.h"
-#include "network/nlTankReplicaComponent.h"
 
 
 namespace nl	{
@@ -52,7 +51,6 @@ namespace nl	{
 
 			size_t activePlayers = 0; //count how many active players we have
 			
-
 			CCArray* destroyedChildren(CCArray::create());
 			CCObject* child = nullptr;
 			CCARRAY_FOREACH(gameplayLayer->getChildren(), child)
@@ -127,7 +125,6 @@ namespace nl	{
 						if(replicaComponent != nullptr)	{
 							replicaComponent->handleDestroyedActorNode();
 							replicaComponentFound = true;
-
 							break;
 						}
 						++idx;
@@ -167,9 +164,36 @@ namespace nl	{
 					GameActor* projectileActor((GameActor*)(*projectile)->getUserobject());
 
 					// check the instigator to prevent killing yourself
-					if(projectileActor->getInstigator() != tankActor)	{
-						if(tankActor->getActorNode()->isDestroyed())	{
+					if(projectileActor->getInstigator() != tankActor)
+					{
+						ActorSprite* playerReplicaComponent(dynamic_cast<ActorSprite*>(projectileActor->getInstigator()));
+						
+						if(playerReplicaComponent != nullptr)
+						{
+							GameActorNode * gameActorNode = dynamic_cast<GameActorNode*>(playerReplicaComponent->getParent());
 
+							if (gameActorNode != nullptr)
+							{
+								TankReplicaComponent *tankReplica = getTankReplicaComponentFromActorNode(gameActorNode);
+
+								if (tankReplica != nullptr)
+								{
+									tankReplica->increaseKillCount();
+								}
+
+							}
+						}
+
+						ReplicaComponent* replicaComponent(dynamic_cast<ReplicaComponent*>(projectileActor->getInstigator()));
+
+						if(replicaComponent != nullptr)
+						{
+							int i = 0;
+						}
+
+						if(tankActor->getActorNode()->isDestroyed())
+						{
+							
 						}
 						else	{
 							// now we destroy both of them
@@ -198,6 +222,25 @@ namespace nl	{
 		while(component != nullptr)
 		{
 			TankPlayerReplicaComponent* replicaComponent(dynamic_cast<TankPlayerReplicaComponent*>(component));
+
+			if(replicaComponent != nullptr)
+			{
+				return replicaComponent;
+			}
+			++idx;
+			component = components->componentAt(idx);
+		}
+	}
+
+	TankReplicaComponent* TankVsTankGameLogicNode::getTankReplicaComponentFromActorNode(ActorNode *actorNode)
+	{
+		// find the TankPlayerReplica component by iterating over all components of the GameActor until we find it
+		ComponentArray* components(actorNode->getComponents());
+		SLSize idx(0);
+		IComponent* component(components->componentAt(idx));
+		while(component != nullptr)
+		{
+			TankReplicaComponent* replicaComponent(dynamic_cast<TankReplicaComponent*>(component));
 
 			if(replicaComponent != nullptr)
 			{

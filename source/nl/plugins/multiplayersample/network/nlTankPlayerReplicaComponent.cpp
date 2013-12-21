@@ -35,6 +35,7 @@ namespace nl	{
 		ServerAuthorityReplicationRule* replicationRule(ServerAuthorityReplicationRule::create());
 		replicationRule->_replica = getReplica();
 		_replica.setReplicationRule(replicationRule);
+
 	}
 
 	TankPlayerReplicaComponent::~TankPlayerReplicaComponent()	{
@@ -46,6 +47,8 @@ namespace nl	{
 		// preUpdate will always be called once per frame
 
 		SLBaseClass::preUpdate(delta);
+
+		
 
 		// pass over the controller values to a controller object
 		_player.accessController()->setActionValue(EControllerAction_Yaw, _ctrlValues._leftRight);
@@ -91,6 +94,12 @@ namespace nl	{
 			}
 		}
 
+		if (getTankReplicaComponent() != nullptr)
+		{
+			//getTankReplicaComponent()->increaseKillCount();
+			//getT
+		}
+		
 	}
 
 	// postUpdate will always be called once per frame
