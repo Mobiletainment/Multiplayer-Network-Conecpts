@@ -25,12 +25,13 @@ namespace nl	{
 	//-------------------------------------------------------------------------
 
 	TankPlayerReplicaComponent::TankPlayerReplicaComponent()
-		:_tankReplicaComponent(nullptr)
+		:_isSpectator(false)
+		,_tankReplicaComponent(nullptr)
 		,_tankActorNode(nullptr)
 		,_lastControlledReplicaNetworkId(RakNet::UNASSIGNED_NETWORK_ID)
 	{
 		_replica.setName(TankPlayerReplicaComponent::staticClassName());
-		
+
 		ServerAuthorityReplicationRule* replicationRule(ServerAuthorityReplicationRule::create());
 		replicationRule->_replica = getReplica();
 		_replica.setReplicationRule(replicationRule);
@@ -93,10 +94,11 @@ namespace nl	{
 	}
 
 	// postUpdate will always be called once per frame
-	void TankPlayerReplicaComponent::postUpdate( float delta ) 	{
+	void TankPlayerReplicaComponent::postUpdate( float delta )
+	{
 		if(isActorNodeDestroyed())	{
-			// TODO @student : nothing todo here right ?
-			//setSpectatorMode(true);
+			// DONE @David : nothing todo here right?
+			setSpectatorMode(true); //1.1.6	the dead player becomes a spectator
 		}
 		else	{
 			if (getTopology()==CLIENT)	{
@@ -117,7 +119,7 @@ namespace nl	{
 					}
 				}
 
-//				if(!isSpectatorMode()) 
+				if(!isSpectatorMode()) //only do this if the player is not spectating
 				{
 					if(getTankReplicaComponent() == nullptr)	{
 

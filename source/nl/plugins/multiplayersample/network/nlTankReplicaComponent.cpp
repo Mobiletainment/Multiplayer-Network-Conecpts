@@ -16,7 +16,7 @@
 #include "nlReplicationRules.h"
 
 namespace nl	{
-	TankReplicaComponent::TankReplicaComponent() : _isSpectator(false)
+	TankReplicaComponent::TankReplicaComponent()
 	{
 		_replica.setName(TankReplicaComponent::staticClassName());
 		_replicationTick.setAnimationFrequency(5);

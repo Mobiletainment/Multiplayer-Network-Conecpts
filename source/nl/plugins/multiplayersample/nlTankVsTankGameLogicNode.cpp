@@ -15,13 +15,12 @@
 #include "nlTankVsTankGameLogicNode.h"
 #include "network/nlGameStateReplicaComponent.h"
 #include "network/nlTankReplicaComponent.h"
+#include "network/nlTankPlayerReplicaComponent.h"
 
 namespace nl	{
 
 	TankVsTankGameLogicNode::TankVsTankGameLogicNode()
 		:_gameplayLayer(nullptr)
-		,_numConnections(0)
-		,_connectionList()
 	{
 	}
 
@@ -36,24 +35,49 @@ namespace nl	{
 		return initialized;
 	}
 
-	void TankVsTankGameLogicNode::update( float dt )	{
+	void TankVsTankGameLogicNode::update( float dt )
+	{
 		SLBaseClass::update(dt);
 
 		SLTimeInterval accumTime(getAccumTime());
 
 		GameplayLayer* gameplayLayer(getGameplayLayer());
-		if(gameplayLayer != nullptr)	{
-
+		if(gameplayLayer != nullptr)
+		{
 			Peer* peer(getPeer());
 
 			// iterate over all children and check if Actors are destroyed
+
+			size_t activePlayers = 0; //count how many active players we have
 
 			CCArray* destroyedChildren(CCArray::create());
 			CCObject* child = nullptr;
 			CCARRAY_FOREACH(gameplayLayer->getChildren(), child)
 			{
 				GameActorNode* actorNode(dynamic_cast<GameActorNode*>(child));
-				if(actorNode != nullptr)	{
+				if(actorNode != nullptr)
+				{
+					// find the TankPlayerReplica component by iterating over all components of the GameActor until we find it
+					ComponentArray* components(actorNode->getComponents());
+					SLSize idx(0);
+					IComponent* component(components->componentAt(idx));
+					while(component != nullptr)
+					{
+						TankPlayerReplicaComponent* replicaComponent(dynamic_cast<TankPlayerReplicaComponent*>(component));
+						if(replicaComponent != nullptr)
+						{
+							if (replicaComponent->isSpectatorMode() == false)
+								++activePlayers; //count the player as active player
+
+							if (activePlayers > PLAYER_LIMIT)
+								replicaComponent->setSpectatorMode(true); //if we already have <4> active players, set the player to spectator mode
+							break;
+						}
+						++idx;
+						component = components->componentAt(idx);
+					}
+
+
 					if(actorNode->isDestroyed())	{
 						destroyedChildren->addObject(actorNode);
 					}
