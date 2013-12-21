@@ -22,18 +22,17 @@ namespace nl	{
 	TankVsTankGameLogicNode::TankVsTankGameLogicNode()
 		:_gameplayLayer(nullptr)
 	{
-		//int max = _spectators->count();
-
 	}
 
 	TankVsTankGameLogicNode::~TankVsTankGameLogicNode()
 	{
+		delete _spectators;
 	}
 
-	bool TankVsTankGameLogicNode::init()	{
+	bool TankVsTankGameLogicNode::init()
+	{
 		bool initialized(SLBaseClass::init());
-
-		_spectators = new CCArray();
+		_spectators = new CCArray(); //initialize empty spectators list
 
 		return initialized;
 	}
@@ -52,7 +51,6 @@ namespace nl	{
 			// iterate over all children and check if Actors are destroyed
 
 			size_t activePlayers = 0; //count how many active players we have
-			size_t dyingPlayers = 0;
 			
 
 			CCArray* destroyedChildren(CCArray::create());
@@ -65,8 +63,6 @@ namespace nl	{
 					if(actorNode->isDestroyed())
 					{
 						destroyedChildren->addObject(actorNode);
-						++dyingPlayers;
-						TankPlayerReplicaComponent* replicaComponent = getTankPlayerReplicaComponentFromActorNode(actorNode);
 					}
 					else
 					{
@@ -75,39 +71,44 @@ namespace nl	{
 						
 						if(replicaComponent != nullptr)
 						{
-							//if we already have <4> active players, set the player to spectator mode
+							//if we already have e.g. 4 active players, set the further players to spectator mode
 							if (activePlayers >= PLAYER_LIMIT)
 								replicaComponent->setSpectatorMode(true);
 
 							if (replicaComponent->isSpectatorMode() == false)
-								++activePlayers; //if the player isn't in spectator mode, count as active player
+								++activePlayers; //if the player isn't in spectator mode, it's an active player
 							else
 							{
-								if (_spectators->indexOfObject(replicaComponent) == UINT_MAX)
-									_spectators->addObject(replicaComponent); //add the spectator to the list so we can disable spectator mode it if not enough active players are playing
+								//if the player is not playing, add him to the spectator list
+								if (_spectators->indexOfObject(replicaComponent) == UINT_MAX) //check if the spectator isn't already in the list
+									_spectators->addObject(replicaComponent); //add the spectator to the list so we can disable spectator mode for it when an active player gets shot
 							}
 						}
 					}
 				}
 			}
 
+			//calculate how many players can be activated from spectator mode
 			int activatePlayers = (int)PLAYER_LIMIT - activePlayers;
 
-			for (int i = 0; i < activatePlayers; i++)
+			for (int i = 0; i < activatePlayers; ++i)
 			{
+				//if a spectator can become active, check if there are enough spectators on the list and if so, active them (disable spectator mode)
 				if (i < _spectators->count())
 				{
 					TankPlayerReplicaComponent* playerReplica(dynamic_cast<TankPlayerReplicaComponent*>(_spectators->objectAtIndex(i)));
-					getPeer()->log(ELogType_Info, "Replica index: %i", playerReplica->idx());
-					playerReplica->setSpectatorMode(false);
+					playerReplica->setSpectatorMode(false); //the player is now active and is able to play
+					getPeer()->log(ELogType_Info, "Player with index %i became active", playerReplica->idx());
 				}
 			}
 
-			for (int i = 0; i < activatePlayers; i++)
+			//update the spectator list and remove all players that got activated
+			for (int i = 0; i < activatePlayers; ++i)
 			{
 				if (i < _spectators->count())
 				{
-					_spectators->removeObjectAtIndex(0);
+					//for every player that got activated, we delete it from the list
+					_spectators->removeObjectAtIndex(0); //the player that gets activated first is at index 0
 				}
 			}
 

@@ -20,9 +20,10 @@
 
 namespace nl	{
 
-	static size_t PLAYER_LIMIT = 2;
+	static size_t PLAYER_LIMIT = 4;
 
-	class TankVsTankGameLogicNode : public PeerObserverNode	{
+	class TankVsTankGameLogicNode : public PeerObserverNode
+	{
 		SL_DECLARE_BASE(PeerObserverNode)
 	public:
 		CREATE_FUNC(TankVsTankGameLogicNode)
@@ -64,7 +65,8 @@ namespace nl	{
 
 		DataStructures::List<Replica3*> _destructionReplicaList;
 		//SL_SYNTHESIZE(CCArray*, _spectators, Spectators);
-		CCArray *_spectators;
+		
+		CCArray *_spectators; //this list provides the order of which spectator becomes active next
 
 	private:
 
