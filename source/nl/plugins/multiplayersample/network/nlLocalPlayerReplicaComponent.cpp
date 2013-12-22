@@ -75,8 +75,13 @@ namespace nl	{
 			_ctrlValues._leftRight = controller->getActionValue(EControllerAction_Yaw);
 			_ctrlValues._forwardBackward = controller->getActionValue(EControllerAction_Move);
 			_ctrlValues._shoot = controller->getActionValue(EControllerAction_Shoot);
-			_ctrlValues._killCount = controller->getActionValue(EControllerAction_Count);
+			//_ctrlValues._killCount = controller->getActionValue(EControllerAction_Count);
 			
+
+			if (_ctrlValues._killCount > 1)
+			{
+				int x = 0;
+			}
 #endif
 		}
 		else if(getTopology() == SERVER)	{
@@ -158,7 +163,7 @@ namespace nl	{
 							_ctrlValues._controlledReplicaNetworkId = UNASSIGNED_NETWORK_ID;
 						}
 
-						tankReplicaComponent->setKillCount(_ctrlValues._killCount);
+						//tankReplicaComponent->setKillCount(_ctrlValues._killCount);
 						//SL_PROCESS_APP()->log(ELogType_Info, "Kill count: %f", _ctrlValues._killCount);
 
 					}

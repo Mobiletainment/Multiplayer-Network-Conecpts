@@ -28,19 +28,20 @@ namespace nl	{
 	}
 
 	// preUpdate will always be called once per frame
-	void TankReplicaComponent::preUpdate( float delta ) 	{
+	void TankReplicaComponent::preUpdate( float delta )
+	{
 		ActorSprite* actorSprite(getActorSprite());
-		if(actorSprite != nullptr)	{
-			
+		if(actorSprite != nullptr)
+		{	
 			if (_labelKillCount == nullptr) //if the kill-count label hasn't been created yet, create it
 			{
-				_labelKillCount = dynamic_cast<CCLabelTTF*>( ControlUtils::createLabel("Tank: 0", kCCTextAlignmentLeft) );
+				_labelKillCount = dynamic_cast<CCLabelTTF*>( ControlUtils::createLabel("Killcount: 0", kCCTextAlignmentLeft) );
 				_labelKillCount->setAnchorPoint(ccp(0.5f, 0.5f));
-				CCPoint labelPosition(0, -10);
+				CCPoint labelPosition(0, -10); //we don't want the label to directly stick on the tank
 				_labelKillCount->setPosition(labelPosition);
 				_labelKillCount->setVisible(true);
 				
-				actorSprite->addChild(_labelKillCount, 0, 54322);
+				actorSprite->addChild(_labelKillCount); //add the label as Child of the actor
 			}
 
 			//Update the kill-count label to displyy the current kill-count
@@ -57,14 +58,15 @@ namespace nl	{
 
 	void TankReplicaComponent::increaseKillCount()
 	{
-		++_killCount;
-		
+		setKillCount(_killCount + 1);
 	}
 
 	void TankReplicaComponent::setKillCount(int newKillCount)
 	{
 		_killCount = newKillCount;
-		_labelKillCount->setString(CCString::createWithFormat("Killcount Tank: %i", _killCount)->getCString());
+
+		//Update the label here instead of the update-Method, so it just gets updated when its content changes
+		_labelKillCount->setString(CCString::createWithFormat("Killcount: %i", _killCount)->getCString());
 	}
 
 	void TankReplicaComponent::postUpdate( float delta )

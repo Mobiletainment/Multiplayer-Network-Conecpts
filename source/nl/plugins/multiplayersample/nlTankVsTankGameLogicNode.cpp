@@ -168,25 +168,21 @@ namespace nl	{
 					if(projectileActor->getInstigator() != tankActor)
 					{
 						ActorSprite* instigatorActorSprite(dynamic_cast<ActorSprite*>(projectileActor->getInstigator()));
-						TankPlayerReplicaComponent *plyer = dynamic_cast<TankPlayerReplicaComponent *>(projectileActor->getActorNode()->getParent());
-						LocalPlayerReplicaComponent *local = dynamic_cast<LocalPlayerReplicaComponent *>(projectileActor->getActorNode()->getParent());
-						
-
+					
 						if(instigatorActorSprite != nullptr)
 						{
 							GameActorNode * gameActorNode = dynamic_cast<GameActorNode*>(instigatorActorSprite->getGameActorNode());
 							
 							if (gameActorNode != nullptr)
 							{
-								TankReplicaComponent *tankplayerReplica = getComponentFromActorNode<TankReplicaComponent>(gameActorNode);
+								TankReplicaComponent *tankReplica = getComponentFromActorNode<TankReplicaComponent>(gameActorNode);
 
-								getPeer()->log(ELogType_Info, "Killer is: %i", getPeer()->getPeerGUID());
-								if (tankplayerReplica != nullptr)
+								getPeer()->log(ELogType_Info, "Tank %i has hit an enemy!", tankReplica->idx());
+								if (tankReplica != nullptr)
 								{
-									//tankplayerReplica->setKillCount(20);
+									tankReplica->increaseKillCount();
 									
 								}
-								//gameActorNode->getComponent("TankReplicaComponent")
 							}
 						}
 

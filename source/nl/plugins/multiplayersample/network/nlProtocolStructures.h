@@ -25,7 +25,7 @@ namespace nl	{
 		float _leftRight;
 		float _forwardBackward;
 		float _shoot;
-		float _killCount;
+		unsigned int _killCount;
 		RakNet::NetworkID _controlledReplicaNetworkId;
 		SLSize _updateTick;
 	} ControllerValues;
@@ -34,7 +34,7 @@ namespace nl	{
 		char _leftRight;
 		char _forwardBackward;
 		char _shoot;
-		short _killCount;
+		unsigned int _killCount;
 		SLSize _updateTick;
 		RakNet::NetworkID _controlledReplicaNetworkId;
 	} Compressed_ControllerValues;

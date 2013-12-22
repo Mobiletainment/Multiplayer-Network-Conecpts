@@ -83,7 +83,7 @@ namespace nl	{
 		comValues._forwardBackward	=	TCompressedFixpoint<float,char,8>::writeCompress(_ctrlValues._forwardBackward	, -1.0f, 1.0f );
 		comValues._leftRight		=	TCompressedFixpoint<float,char,8>::writeCompress(_ctrlValues._leftRight			, -1.0f, 1.0f );
 		comValues._shoot			=	TCompressedFixpoint<float,char,8>::writeCompress(_ctrlValues._shoot				, -1.0f, 1.0f );
-		comValues._killCount		=	TCompressedFixpoint<float,short,16>::writeCompress(_ctrlValues._killCount		,  0.0f, 255.0f);
+		comValues._killCount		=	_ctrlValues._killCount;
 
 		comValues._updateTick = _ctrlValues._updateTick;
 		comValues._controlledReplicaNetworkId = _ctrlValues._controlledReplicaNetworkId;
@@ -113,7 +113,7 @@ namespace nl	{
 		_ctrlValues._forwardBackward			=TCompressedFixpoint<float,char,8>::readInflate(comValues._forwardBackward				, -1.0f, 1.0f );
 		_ctrlValues._leftRight					=TCompressedFixpoint<float,char,8>::readInflate(comValues._leftRight					, -1.0f, 1.0f );
 		_ctrlValues._shoot						=TCompressedFixpoint<float,char,8>::readInflate(comValues._shoot						, -1.0f, 1.0f );
-		_ctrlValues._killCount					=TCompressedFixpoint<float,short,16>::readInflate(comValues._killCount					,  0.0f, 255.0f );
+		_ctrlValues._killCount					=comValues._killCount;
 		_ctrlValues._updateTick = comValues._updateTick;
 		_ctrlValues._controlledReplicaNetworkId =comValues._controlledReplicaNetworkId;
 		

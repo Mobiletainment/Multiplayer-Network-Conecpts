@@ -49,13 +49,17 @@ namespace nl	{
 
 		SLBaseClass::preUpdate(delta);
 
-
+		
 
 		// pass over the controller values to a controller object
 		_player.accessController()->setActionValue(EControllerAction_Yaw, _ctrlValues._leftRight);
 		_player.accessController()->setActionValue(EControllerAction_Move, _ctrlValues._forwardBackward);
 		_player.accessController()->setActionValue(EControllerAction_Shoot, _ctrlValues._shoot);		
-		_player.accessController()->setActionValue(EControllerAction_Count, _ctrlValues._killCount);
+		
+		if(_ctrlValues._killCount > 1 )
+		{
+			int x = 0;
+		}
 
 		// TODO @student : the tank replica component property on the client is null
 		//                 you can replicate the played replica networkid (which is done anyways already)
@@ -88,7 +92,11 @@ namespace nl	{
 		else if (getTopology()==SERVER)
 		{
 			// once you've got here the player needs to play
-			if(getTankReplicaComponent() != nullptr)	{
+			if(getTankReplicaComponent() != nullptr)
+			{
+				getTankReplicaComponent()->setKillCount(_ctrlValues._killCount);
+				
+
 				if(getTankReplicaComponent()->getActorSprite() != nullptr)
 				{
 					AbstractVehicle* vehicle(getTankReplicaComponent()->getActorSprite()->getVehicle());
@@ -106,8 +114,13 @@ namespace nl	{
 
 	void TankPlayerReplicaComponent::increaseKillCount()
 	{
-		if(_ctrlValues._killCount < 60)
-		_ctrlValues._killCount++;
+		//if(_ctrlValues._killCount < 60)
+
+		_ctrlValues._killCount = _ctrlValues._killCount + 1;
+		
+		//_player.accessController()->setActionValue(EControllerAction_Count, _ctrlValues._killCount);
+
+		
 	}
 
 	// postUpdate will always be called once per frame
@@ -126,12 +139,6 @@ namespace nl	{
 				GameActorNode* tankActorNode(getTankActorNode());
 				if(tankReplicaComponent != nullptr)
 				{
-					if (getTankReplicaComponent() != nullptr)
-					{
-						//getTankReplicaComponent()->increaseKillCount();
-						//getTankReplicaComponent()->setKillCount(_ctrlValues._killCount);
-					}
-
 					if(tankActorNode != nullptr)	{
 						if(tankActorNode->isDestroyed())	{
 							// player not destroyed
