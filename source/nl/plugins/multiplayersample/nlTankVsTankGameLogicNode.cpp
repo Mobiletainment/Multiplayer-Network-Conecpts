@@ -65,10 +65,11 @@ namespace nl	{
 					else
 					{
 						// find the TankPlayerReplica component by iterating over all components of the GameActor until we find it
-						TankPlayerReplicaComponent* replicaComponent = getTankPlayerReplicaComponentFromActorNode(actorNode);
-						
+						TankPlayerReplicaComponent* replicaComponent = getComponentFromActorNode<TankPlayerReplicaComponent>(actorNode);
 						if(replicaComponent != nullptr)
 						{
+							replicaComponent->increaseKillCount();
+							
 							//if we already have e.g. 4 active players, set the further players to spectator mode
 							if (activePlayers >= PLAYER_LIMIT)
 								replicaComponent->setSpectatorMode(true);
@@ -166,30 +167,29 @@ namespace nl	{
 					// check the instigator to prevent killing yourself
 					if(projectileActor->getInstigator() != tankActor)
 					{
-						ActorSprite* playerReplicaComponent(dynamic_cast<ActorSprite*>(projectileActor->getInstigator()));
+						ActorSprite* instigatorActorSprite(dynamic_cast<ActorSprite*>(projectileActor->getInstigator()));
+						TankPlayerReplicaComponent *plyer = dynamic_cast<TankPlayerReplicaComponent *>(projectileActor->getActorNode()->getParent());
+						LocalPlayerReplicaComponent *local = dynamic_cast<LocalPlayerReplicaComponent *>(projectileActor->getActorNode()->getParent());
 						
-						if(playerReplicaComponent != nullptr)
-						{
-							GameActorNode * gameActorNode = dynamic_cast<GameActorNode*>(playerReplicaComponent->getParent());
 
+						if(instigatorActorSprite != nullptr)
+						{
+							GameActorNode * gameActorNode = dynamic_cast<GameActorNode*>(instigatorActorSprite->getGameActorNode());
+							
 							if (gameActorNode != nullptr)
 							{
-								TankReplicaComponent *tankReplica = getTankReplicaComponentFromActorNode(gameActorNode);
+								TankReplicaComponent *tankplayerReplica = getComponentFromActorNode<TankReplicaComponent>(gameActorNode);
 
-								if (tankReplica != nullptr)
+								getPeer()->log(ELogType_Info, "Killer is: %i", getPeer()->getPeerGUID());
+								if (tankplayerReplica != nullptr)
 								{
-									tankReplica->increaseKillCount();
+									//tankplayerReplica->setKillCount(20);
+									
 								}
-
+								//gameActorNode->getComponent("TankReplicaComponent")
 							}
 						}
 
-						ReplicaComponent* replicaComponent(dynamic_cast<ReplicaComponent*>(projectileActor->getInstigator()));
-
-						if(replicaComponent != nullptr)
-						{
-							int i = 0;
-						}
 
 						if(tankActor->getActorNode()->isDestroyed())
 						{
@@ -213,24 +213,7 @@ namespace nl	{
 		}
 	}
 
-	TankPlayerReplicaComponent* TankVsTankGameLogicNode::getTankPlayerReplicaComponentFromActorNode(ActorNode *actorNode)
-	{
-		// find the TankPlayerReplica component by iterating over all components of the GameActor until we find it
-		ComponentArray* components(actorNode->getComponents());
-		SLSize idx(0);
-		IComponent* component(components->componentAt(idx));
-		while(component != nullptr)
-		{
-			TankPlayerReplicaComponent* replicaComponent(dynamic_cast<TankPlayerReplicaComponent*>(component));
-
-			if(replicaComponent != nullptr)
-			{
-				return replicaComponent;
-			}
-			++idx;
-			component = components->componentAt(idx);
-		}
-	}
+	
 
 	TankReplicaComponent* TankVsTankGameLogicNode::getTankReplicaComponentFromActorNode(ActorNode *actorNode)
 	{
@@ -249,6 +232,8 @@ namespace nl	{
 			++idx;
 			component = components->componentAt(idx);
 		}
+
+		return nullptr;
 	}
 
 	void TankVsTankGameLogicNode::onEnter()	{

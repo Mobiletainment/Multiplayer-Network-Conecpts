@@ -40,8 +40,9 @@ namespace nl	{
 
 		virtual RakNet::RM3SerializationResult serialize(RakNet::SerializeParameters *serializeParameters) SL_OVERRIDE;
 		virtual void deserialize(RakNet::DeserializeParameters *deserializeParameters) SL_OVERRIDE;
-
+		
 		SL_SYNTHESIZE_RETAIN(TankPlayerReplicaComponent*, _serverPlayerReplicaComponent, TankPlayerReplicaComponent);
+		SL_SYNTHESIZE_RETAIN(GameActorNode*, _tankActorNode, TankActorNode);
 
 	protected:
 		LocalPlayerReplicaComponent();

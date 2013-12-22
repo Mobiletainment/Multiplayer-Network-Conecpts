@@ -18,6 +18,7 @@
 #include <stateless/cocosgame/slCocosGame.h>
 #include "network/nlTankPlayerReplicaComponent.h"
 #include "network/nlTankReplicaComponent.h"
+#include "network/nlLocalPlayerReplicaComponent.h"
 
 namespace nl	{
 
@@ -49,7 +50,28 @@ namespace nl	{
 		virtual void onPeerWillDisconnect(PeerWrapper* peerWrapper) SL_OVERRIDE;
 
 		// new by David
-		TankPlayerReplicaComponent* getTankPlayerReplicaComponentFromActorNode(ActorNode *actorNode);
+		template <class T>
+		T* getComponentFromActorNode(ActorNode *actorNode)
+		{
+			// find the TankPlayerReplica component by iterating over all components of the GameActor until we find it
+			ComponentArray* components(actorNode->getComponents());
+			SLSize idx(0);
+			IComponent* component(components->componentAt(idx));
+			while(component != nullptr)
+			{
+				T* replicaComponent(dynamic_cast<T*>(component));
+
+				if(replicaComponent != nullptr)
+				{
+					return replicaComponent;
+				}
+				++idx;
+				component = components->componentAt(idx);
+			}
+
+			return nullptr;
+		}
+
 		TankReplicaComponent* getTankReplicaComponentFromActorNode(ActorNode *actorNode);
 
 

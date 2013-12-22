@@ -46,10 +46,14 @@ namespace nl	{
 		SL_SYNTHESIZE_RETAIN(GameActorNode*, _tankActorNode, TankActorNode);
 		SL_SYNTHESIZE_IS(bool,_isSpectator,SpectatorMode,SpectatorMode);
 		
+		void increaseKillCount();
 
 	protected:
 		TankPlayerReplicaComponent();
 		virtual ~TankPlayerReplicaComponent();
+
+		CCLabelTTF* _labelKillCount;
+
 	private:
 		bool _createVehicleReplica;
 		RakNet::NetworkID _lastControlledReplicaNetworkId;

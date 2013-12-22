@@ -29,6 +29,7 @@ namespace nl	{
 		,_tankReplicaComponent(nullptr)
 		,_tankActorNode(nullptr)
 		,_lastControlledReplicaNetworkId(RakNet::UNASSIGNED_NETWORK_ID)
+		,_labelKillCount(nullptr)
 	{
 		_replica.setName(TankPlayerReplicaComponent::staticClassName());
 
@@ -48,19 +49,21 @@ namespace nl	{
 
 		SLBaseClass::preUpdate(delta);
 
-		
+
 
 		// pass over the controller values to a controller object
 		_player.accessController()->setActionValue(EControllerAction_Yaw, _ctrlValues._leftRight);
 		_player.accessController()->setActionValue(EControllerAction_Move, _ctrlValues._forwardBackward);
-		_player.accessController()->setActionValue(EControllerAction_Shoot, _ctrlValues._shoot);
+		_player.accessController()->setActionValue(EControllerAction_Shoot, _ctrlValues._shoot);		
+		_player.accessController()->setActionValue(EControllerAction_Count, _ctrlValues._killCount);
 
 		// TODO @student : the tank replica component property on the client is null
 		//                 you can replicate the played replica networkid (which is done anyways already)
 		//                 find the replica on the client side and let the client play
 		//                 but be careful the tank might get shot ...
 
-		if (getTopology()==CLIENT)	{
+		if (getTopology()==CLIENT)
+		{
 			// this is actually client code
 			// hint: you need validity checks here
 			// hint: replicaManager->getReplicaByNetworkID(_ctrlValues._controlledReplicaNetworkId)
@@ -68,38 +71,43 @@ namespace nl	{
 			/*
 			... insert missing code
 			*/
-
-
 			// once you've got here the player needs to play
-			if(getTankReplicaComponent() != nullptr)	{
-				if(getTankReplicaComponent()->getActorSprite() != nullptr)	{
+			if(getTankReplicaComponent() != nullptr)
+			{
+				if(getTankReplicaComponent()->getActorSprite() != nullptr)
+				{
 					AbstractVehicle* vehicle(getTankReplicaComponent()->getActorSprite()->getVehicle());
 					if(vehicle != nullptr)	{
 						_player.play(vehicle);
 						_ctrlValues._updateTick = vehicle->updateTicks();
+						
 					}
 				}
 			}
 		}
-		else if (getTopology()==SERVER)	{
-			// once you've got here the player needs to play
-			if(getTankReplicaComponent() != nullptr)	{
-				if(getTankReplicaComponent()->getActorSprite() != nullptr)	{
-					AbstractVehicle* vehicle(getTankReplicaComponent()->getActorSprite()->getVehicle());
-					if(vehicle != nullptr)	{
-						_player.play(vehicle);
-						_ctrlValues._updateTick = vehicle->updateTicks();
-					}
-				}
-			}
-		}
-
-		if (getTankReplicaComponent() != nullptr)
+		else if (getTopology()==SERVER)
 		{
-			//getTankReplicaComponent()->increaseKillCount();
-			//getT
+			// once you've got here the player needs to play
+			if(getTankReplicaComponent() != nullptr)	{
+				if(getTankReplicaComponent()->getActorSprite() != nullptr)
+				{
+					AbstractVehicle* vehicle(getTankReplicaComponent()->getActorSprite()->getVehicle());
+					if(vehicle != nullptr)	{
+						
+						_player.play(vehicle);
+						_ctrlValues._updateTick = vehicle->updateTicks();
+						
+					}
+				}
+			}
 		}
-		
+
+	}
+
+	void TankPlayerReplicaComponent::increaseKillCount()
+	{
+		if(_ctrlValues._killCount < 60)
+		_ctrlValues._killCount++;
 	}
 
 	// postUpdate will always be called once per frame
@@ -112,10 +120,18 @@ namespace nl	{
 		else	{
 			if (getTopology()==CLIENT)	{
 			}
-			else if (getTopology()==SERVER)	{
+			else if (getTopology()==SERVER)
+			{
 				TankReplicaComponent* tankReplicaComponent(getTankReplicaComponent());
 				GameActorNode* tankActorNode(getTankActorNode());
-				if(tankReplicaComponent != nullptr)	{
+				if(tankReplicaComponent != nullptr)
+				{
+					if (getTankReplicaComponent() != nullptr)
+					{
+						//getTankReplicaComponent()->increaseKillCount();
+						//getTankReplicaComponent()->setKillCount(_ctrlValues._killCount);
+					}
+
 					if(tankActorNode != nullptr)	{
 						if(tankActorNode->isDestroyed())	{
 							// player not destroyed

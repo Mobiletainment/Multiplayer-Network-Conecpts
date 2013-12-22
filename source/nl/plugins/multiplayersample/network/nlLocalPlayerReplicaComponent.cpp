@@ -30,12 +30,13 @@ namespace nl	{
 	LocalPlayerReplicaComponent::LocalPlayerReplicaComponent()
 		:_serverPlayerReplicaComponent(nullptr)
 		,_createServerPlayerReplica(false)
+		,_tankActorNode(nullptr)
 	{
 		_replica.setName(LocalPlayerReplicaComponent::staticClassName());
 		ClientToServerReplicationRule* replicationRule(ClientToServerReplicationRule::create());
 		replicationRule->_replica = getReplica();
 		_replica.setReplicationRule(replicationRule);
-		
+
 		_physicsTick.setAnimationFrequency(50);
 	}
 
@@ -45,7 +46,7 @@ namespace nl	{
 
 	void LocalPlayerReplicaComponent::preUpdate( float delta ) 	{
 		SLBaseClass::preUpdate(delta);
-
+		
 		//@David: maintain and update the local update tick
 		if (getTopology() == CLIENT)
 		{
@@ -56,7 +57,7 @@ namespace nl	{
 
 			}
 		}
-		
+
 		// preUpdate will always be called once per frame
 
 		// DONE @student : 2.1. send controller values to the server
@@ -74,8 +75,8 @@ namespace nl	{
 			_ctrlValues._leftRight = controller->getActionValue(EControllerAction_Yaw);
 			_ctrlValues._forwardBackward = controller->getActionValue(EControllerAction_Move);
 			_ctrlValues._shoot = controller->getActionValue(EControllerAction_Shoot);
-
-
+			_ctrlValues._killCount = controller->getActionValue(EControllerAction_Count);
+			
 #endif
 		}
 		else if(getTopology() == SERVER)	{
@@ -128,7 +129,9 @@ namespace nl	{
 		}
 		else	
 		{
-			if (getTopology()==CLIENT)	{
+			if (getTopology()==CLIENT)
+			{
+				
 			}
 			else if (getTopology()==SERVER)
 			{
@@ -136,15 +139,17 @@ namespace nl	{
 				TankPlayerReplicaComponent* tankPlayerReplicaComponent(getTankPlayerReplicaComponent());
 				TankReplicaComponent* tankReplicaComponent(tankPlayerReplicaComponent->getTankReplicaComponent());
 				GameActorNode* gameActorNode(tankPlayerReplicaComponent->getTankActorNode());
-				if(tankReplicaComponent != nullptr)	{
-					if(gameActorNode != nullptr)	{
+				if(tankReplicaComponent != nullptr)
+				{
+					if(gameActorNode != nullptr)
+					{
 						if(gameActorNode->isDestroyed()) //the gameActorNode is destroyed
 						{
 							if(tankPlayerReplicaComponent->getActorNode()->isDestroyed() == false) //the playerReplica's ActorNode is not destroyed
 							{
 								tankPlayerReplicaComponent->setTankActorNode(nullptr);
 								tankPlayerReplicaComponent->setTankReplicaComponent(nullptr);
-								
+
 								//Player was destroyed -> enable spectator mode
 								tankPlayerReplicaComponent->setSpectatorMode(true);
 								SL_PROCESS_APP()->log(ELogType_Info,"Player destroyed & spectator mode enabled");
@@ -152,10 +157,16 @@ namespace nl	{
 							}
 							_ctrlValues._controlledReplicaNetworkId = UNASSIGNED_NETWORK_ID;
 						}
+
+						tankReplicaComponent->setKillCount(_ctrlValues._killCount);
+						//SL_PROCESS_APP()->log(ELogType_Info, "Kill count: %f", _ctrlValues._killCount);
+
 					}
 				}
 			}
 		}
+
+
 
 		SLBaseClass::postUpdate(delta);
 	}
