@@ -176,9 +176,8 @@ namespace nl	{
 				PeerObserverNode* peerObserverNode(nullptr);
 				// Kristian Added End
 
-				if(idx == 0)
+				if(idx == 0) // the server
 				{
-					// the server
 					nl::PeerNode* serverPeerNode(nl::ServerPeerNode::create());
 					twinLayer->addChild(serverPeerNode);
 					serverPeerNode->createPeerUI(leftLayer);
@@ -196,9 +195,8 @@ namespace nl	{
 					twinLayer->addChild(gameLogicNode);
 
 				}
-				else
+				else //clients
 				{
-					// some clients
 					nl::PeerNode* clientPeerNode(nl::ClientPeerNode::create());
 					twinLayer->addChild(clientPeerNode);
 					clientPeerNode->createPeerUI(leftLayer);
