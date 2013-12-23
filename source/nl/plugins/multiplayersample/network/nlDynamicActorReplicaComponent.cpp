@@ -14,6 +14,7 @@
 #include "stdafx.h"
 #include "nlDynamicActorReplicaComponent.h"
 #include "nlReplicationRules.h"
+#include "slCompressed.h"
 
 #define NL_DYNAMICACTORREPLICA_HAS_SERIALIZE_LOG 0
 #define NL_DYNAMICACTOREPLICA_HAS_SERIALIZE_CONSTRUCTION_LOG 0
@@ -35,6 +36,7 @@ namespace nl	{
 		_replica.setReplicationRule(replicationRule);
 
 		_replicationTick.setAnimationFrequency(5);
+		_actorDatagram._killCount = 0;
 	}
 
 	DynamicActorReplicaComponent::~DynamicActorReplicaComponent()
@@ -175,8 +177,25 @@ namespace nl	{
 #endif
 
 		RakNet::BitStream& bitStream(serializeParameters->outputBitstream[0]);
-		bitStream.WriteAlignedBytes( (const unsigned char *)&_actorDatagram, sizeof(Dynamic2DActorDatagram) );
+		
+		//DONE: @David Compression
+		//Old-Way:
+		//bitStream.WriteAlignedBytes( (const unsigned char *)&_actorDatagram, sizeof(Dynamic2DActorDatagram) );
+		
+		Compressed_Dynamic2DActorDatagram comValues;
+		comValues._x = _actorDatagram._x;
+		comValues._y = _actorDatagram._y;
+		comValues._fx	=	TCompressedFixpoint<float,char,8>::writeCompress(_actorDatagram._fx, -1.0f, 1.0f );
+		comValues._fy	=	TCompressedFixpoint<float,char,8>::writeCompress(_actorDatagram._fy, -1.0f, 1.0f );
+		
+		comValues._killCount = _actorDatagram._killCount;
+		comValues._lvx = _actorDatagram._lvx;
+		comValues._lvy = _actorDatagram._lvy;
+		comValues._avz = _actorDatagram._avz;
+		comValues._updateTick = _actorDatagram._updateTick;
 
+		bitStream.WriteAlignedBytes( (const unsigned char *)&comValues, sizeof(Compressed_Dynamic2DActorDatagram));
+		
 		return RakNet::RM3SR_SERIALIZED_ALWAYS_IDENTICALLY;
 	}
 
@@ -191,7 +210,24 @@ namespace nl	{
 			return;
 		}
 
-		bitStream.ReadAlignedBytes( (unsigned char *)&_actorDatagram, sizeof(Dynamic2DActorDatagram) );
+		//Old Way:
+		//bitStream.ReadAlignedBytes( (unsigned char *)&_actorDatagram, sizeof(Dynamic2DActorDatagram) );
+		
+		Compressed_Dynamic2DActorDatagram comValues;
+		bitStream.ReadAlignedBytes( (unsigned char *)&comValues, sizeof(Compressed_Dynamic2DActorDatagram) );
+
+		_actorDatagram._x = comValues._x;
+		_actorDatagram._y = comValues._y;
+		_actorDatagram._fx = TCompressedFixpoint<float,char,8>::readInflate(comValues._fx, -1.0f, 1.0f );
+		_actorDatagram._fy = TCompressedFixpoint<float,char,8>::readInflate(comValues._fy, -1.0f, 1.0f );
+		_killCount = _actorDatagram._killCount = comValues._killCount;
+		_actorDatagram._lvx = comValues._lvx;
+		_actorDatagram._lvy = comValues._lvy;
+		_actorDatagram._avz = comValues._avz;
+		_actorDatagram._updateTick = comValues._updateTick;
+		
+
+		_killCount = _actorDatagram._killCount;
 
 		if(getActorSprite() == nullptr)	{
 			return;

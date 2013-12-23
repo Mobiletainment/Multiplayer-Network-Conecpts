@@ -39,7 +39,9 @@ namespace nl	{
 
 		//DONE: 1.1.8 kill-count UI
 		CCLabelTTF* _labelInfo;
+		const char * _labelText;
 		void setKillCount(int newKillCount);
+		
 
 		virtual void preSerialize() SL_OVERRIDE;
 

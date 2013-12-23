@@ -48,7 +48,8 @@ namespace nl	{
 			//maintain readability of the kill-count label by keeping it's direction horizontal when rotating the tank
 			float rotateHorizontally = 360 - actorSprite->getRotation();
 			_labelInfo->setRotation(rotateHorizontally);
-			
+			_labelInfo->setString(CCString::createWithFormat("Tank: %i, Kills: %i", this->getName(), _killCount)->getCString());
+
 			
 			actorSprite->getActorFlags().removeFlag(EActorFlag_DrawVehicle);
 			actorSprite->getActorFlags().addFlag(EActorFlag_IsTank);
@@ -72,7 +73,6 @@ namespace nl	{
 		_killCount = newKillCount;
 
 		//Update the label here instead of the update-Method, so it just gets updated when its content changes
-		_labelInfo->setString(CCString::createWithFormat("Tank: %i, Kills: %i", this->getName(), _killCount)->getCString());
 	}
 
 	void TankReplicaComponent::postUpdate( float delta )

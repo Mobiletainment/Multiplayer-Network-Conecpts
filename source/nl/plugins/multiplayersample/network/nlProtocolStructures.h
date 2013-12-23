@@ -45,21 +45,21 @@ namespace nl	{
 		float _lvx;
 		float _lvy;
 		float _avz;
-		unsigned int _killCount;
+		unsigned short _killCount;
 		SLSize _updateTick;
 	} Dynamic2DActorDatagram;
 
 	// TODO @David: compressed structures implemented but not used yet
 	typedef struct TCompressedDynamic2DActorDatagram	{
-		short _x;
-		short _y;
+		float _x;
+		float _y;
+		char _fx;
+		char _fy;
+		unsigned short _killCount;
 		float _lvx;
 		float _lvy;
-		SLSize _updateTick;
-		float _fx;
-		float _fy;
 		float _avz;
-		unsigned int _killCount;
+		SLSize _updateTick;
 	} Compressed_Dynamic2DActorDatagram;
 
 
