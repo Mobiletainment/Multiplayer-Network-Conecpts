@@ -21,7 +21,7 @@
 
 namespace nl	{
 
-
+	//initialize kill-count with 0
 	DynamicActorReplicaComponent::DynamicActorReplicaComponent()
 		:_tickToReplicate(0)
 		,_tickReplicated(0)
@@ -70,10 +70,13 @@ namespace nl	{
 	{
 		// server / authority code
 
-		if(getTopology() == SERVER)	{
+		if(getTopology() == SERVER)
+		{
 			// this boolean is dependent from the replication frequency
-			if(_sampleVehicleState)	{
-				if(getActorSprite() == nullptr)	{
+			if(_sampleVehicleState)
+			{
+				if(getActorSprite() == nullptr)
+				{
 					return;
 				}
 				// TODO @student : the vehicle has a function updateTicks
@@ -81,7 +84,8 @@ namespace nl	{
 				// TODO @student : compressed datagram
 				// TODO @student : extended datagram
 				AbstractVehicle* vehicle(getActorSprite()->getVehicle());
-				if(vehicle != nullptr)	{
+				if(vehicle != nullptr)
+				{
 					_localSpaceData = vehicle->getLocalSpaceData();
 					_motionState.readLocalSpaceData(_localSpaceData);
 
@@ -94,7 +98,7 @@ namespace nl	{
 					_actorDatagram._lvx = _localSpaceData._linearVelocity.x;
 					_actorDatagram._lvy = _localSpaceData._linearVelocity.y;
 					
-					_actorDatagram._killCount = _killCount;
+					_actorDatagram._killCount = _killCount; //set the current kill-count
 
 					_actorDatagram._avz = _localSpaceData._angularVelocity.z;
 				}

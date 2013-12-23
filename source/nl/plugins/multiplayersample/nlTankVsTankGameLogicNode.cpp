@@ -165,21 +165,23 @@ namespace nl	{
 					// check the instigator to prevent killing yourself
 					if(projectileActor->getInstigator() != tankActor)
 					{
+						//now we want to find the tank who shot the projectile to reward it
 						ActorSprite* instigatorActorSprite(dynamic_cast<ActorSprite*>(projectileActor->getInstigator()));
 					
 						if(instigatorActorSprite != nullptr)
 						{
+							//we need the GameActorNode so we can access the TankReplicaComponent which is needed to increase the kill-count
 							GameActorNode * gameActorNode = dynamic_cast<GameActorNode*>(instigatorActorSprite->getGameActorNode());
 							
 							if (gameActorNode != nullptr)
 							{
-								TankReplicaComponent *tankReplica = getComponentFromActorNode<TankReplicaComponent>(gameActorNode);
+								//get the TankReplica as component of the GameActorNode
+								TankReplicaComponent *tankReplica = getComponentFromActorNode<TankReplicaComponent>(gameActorNode); //I've written a template method to comfortably request a component from a GameActorNdoe
 
-								getPeer()->log(ELogType_Info, "Tank %i has hit an enemy!", tankReplica->idx());
 								if (tankReplica != nullptr)
 								{
-									tankReplica->increaseKillCount();
-									
+									getPeer()->log(ELogType_Info, "Tank %i has hit an enemy!", tankReplica->idx());
+									tankReplica->increaseKillCount(); //reward the player by increasing the kill-count
 								}
 							}
 						}

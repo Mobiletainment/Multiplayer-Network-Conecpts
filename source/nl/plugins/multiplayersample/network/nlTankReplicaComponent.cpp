@@ -17,12 +17,10 @@
 
 namespace nl	{
 	TankReplicaComponent::TankReplicaComponent()
-		: _labelKillCount(nullptr)
-		, _labelName(nullptr)
+		: _labelInfo(nullptr)
 	{
 		_replica.setName(TankReplicaComponent::staticClassName());
 		_replicationTick.setAnimationFrequency(5);
-		setTankName(new CCString("-1"));
 	}
 
 	TankReplicaComponent::~TankReplicaComponent()	{
@@ -34,22 +32,22 @@ namespace nl	{
 		ActorSprite* actorSprite(getActorSprite());
 		if(actorSprite != nullptr)
 		{	
-			if (_labelKillCount == nullptr) //if the kill-count label hasn't been created yet, create it
+			if (_labelInfo == nullptr) //if the kill-count label hasn't been created yet, create it
 			{
+				_labelInfo = dynamic_cast<CCLabelTTF*>( ControlUtils::createLabel("New Tank", kCCTextAlignmentLeft) );
+				_labelInfo->setAnchorPoint(ccp(0.5f, 0.5f));
 				CCPoint labelPosition(0, -10); //we don't want the label to directly stick on the tank
-				_labelKillCount = dynamic_cast<CCLabelTTF*>( ControlUtils::createLabel("Name: x, Killcount: 0", kCCTextAlignmentLeft) );
-				_labelKillCount->setAnchorPoint(ccp(0.5f, 0.5f));
-				_labelKillCount->setPosition(labelPosition);
-				_labelKillCount->setVisible(true);
+				_labelInfo->setPosition(labelPosition);
+				_labelInfo->setVisible(true);
 				setKillCount(0);
-				actorSprite->addChild(_labelKillCount); //add the label as Child of the actor
+				actorSprite->addChild(_labelInfo); //add the label as Child of the actor
 				
 			}
 
 			//Update the kill-count label to displyy the current kill-count
 			//maintain readability of the kill-count label by keeping it's direction horizontal when rotating the tank
 			float rotateHorizontally = 360 - actorSprite->getRotation();
-			_labelKillCount->setRotation(rotateHorizontally);
+			_labelInfo->setRotation(rotateHorizontally);
 			
 			
 			actorSprite->getActorFlags().removeFlag(EActorFlag_DrawVehicle);
@@ -74,7 +72,7 @@ namespace nl	{
 		_killCount = newKillCount;
 
 		//Update the label here instead of the update-Method, so it just gets updated when its content changes
-		_labelKillCount->setString(CCString::createWithFormat("Tank: %i, Kills: %i", this->getName(), _killCount)->getCString());
+		_labelInfo->setString(CCString::createWithFormat("Tank: %i, Kills: %i", this->getName(), _killCount)->getCString());
 	}
 
 	void TankReplicaComponent::postUpdate( float delta )
