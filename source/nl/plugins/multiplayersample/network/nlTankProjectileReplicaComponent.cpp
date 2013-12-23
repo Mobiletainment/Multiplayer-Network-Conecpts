@@ -20,7 +20,7 @@ namespace nl	{
 	TankProjectileReplicaComponent::TankProjectileReplicaComponent()
 	{
 		_replica.setName(TankProjectileReplicaComponent::staticClassName());
-
+		printf("TankProjectile Instantiated\n");
 		_replicationTick.setAnimationFrequency(500);
 		_lifeTimeTick.setAnimationInterval(500);
 	}
@@ -64,6 +64,17 @@ namespace nl	{
 		}
 
 		SLBaseClass::postUpdate(delta);
+	}
+
+	RakNet::RM3SerializationResult TankProjectileReplicaComponent::serialize(RakNet::SerializeParameters *serializeParameters)
+	{	
+		return RM3SR_DO_NOT_SERIALIZE;	
+	}
+
+	// client / receive code
+	void TankProjectileReplicaComponent::deserialize(RakNet::DeserializeParameters *deserializeParameters)
+	{
+		SL_ASSERT("Error: Deserializing TankProjectileReplica. Something went wrong, because no serialization of ProjectileReplicas is necessary!");
 	}
 }
 

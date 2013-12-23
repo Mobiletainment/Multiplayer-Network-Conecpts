@@ -39,6 +39,10 @@ namespace nl	{
 		AnimationTick _lifeTimeTick;
 		Player _player;
 
+		virtual RakNet::RM3SerializationResult serialize(RakNet::SerializeParameters *serializeParameters) SL_OVERRIDE;
+		virtual void deserialize(RakNet::DeserializeParameters *deserializeParameters) SL_OVERRIDE;
+
+
 	private:
 
 	};
