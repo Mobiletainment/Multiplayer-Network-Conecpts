@@ -260,10 +260,7 @@ namespace nl	{
 				_actorDatagram._avz
 				);
 
-			// TODO @student : client side interpolation factor UI
-			// TODO @student : move interpolarion code to the right place
-
-			float linearInterpolationFactor(0.75f);
+			float linearInterpolationFactor(0.95f);
 
 			Vec3 newPosition(ProtocolUtilities::interpolateNetVector(vehicle->position(),
 				serverPosition, linearInterpolationFactor));
