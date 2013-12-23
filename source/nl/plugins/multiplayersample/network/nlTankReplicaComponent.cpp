@@ -17,7 +17,7 @@
 
 namespace nl	{
 	TankReplicaComponent::TankReplicaComponent()
-		: _labelInfo(nullptr)
+		: _labelInfo(nullptr), _playerName(nullptr)
 	{
 		_replica.setName(TankReplicaComponent::staticClassName());
 		_replicationTick.setAnimationFrequency(5);
@@ -48,8 +48,11 @@ namespace nl	{
 			//maintain readability of the kill-count label by keeping it's direction horizontal when rotating the tank
 			float rotateHorizontally = 360 - actorSprite->getRotation();
 			_labelInfo->setRotation(rotateHorizontally);
-			_labelInfo->setString(CCString::createWithFormat("Tank: %i, Kills: %i", this->getName(), _killCount)->getCString());
 
+			if (_playerName == nullptr) //check if we've already read the player's name
+				_playerName = (CCString *) getConstructionDictionary()->objectForKey("name"); //get it from the construction dictionary
+			
+			_labelInfo->setString(CCString::createWithFormat("Tank: %s, Kills: %i", _playerName->getCString(), _killCount)->getCString());
 			
 			actorSprite->getActorFlags().removeFlag(EActorFlag_DrawVehicle);
 			actorSprite->getActorFlags().addFlag(EActorFlag_IsTank);

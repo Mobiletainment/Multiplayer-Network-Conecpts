@@ -19,7 +19,7 @@
 namespace nl	{
 
 	TankVsTankGameLogicNode::TankVsTankGameLogicNode()
-		:_gameplayLayer(nullptr)
+		:_gameplayLayer(nullptr), _totalPlayers(0)
 	{
 	}
 
@@ -66,6 +66,7 @@ namespace nl	{
 					{
 						// find the TankPlayerReplica component by iterating over all components of the GameActor until we find it
 						TankPlayerReplicaComponent* replicaComponent = getComponentFromActorNode<TankPlayerReplicaComponent>(actorNode);
+
 						if(replicaComponent != nullptr)
 						{
 							//if we already have e.g. 4 active players, set the further players to spectator mode
@@ -284,15 +285,10 @@ namespace nl	{
 
 	CCDictionary* TankVsTankGameLogicNode::createTankCreationDictionary()
 	{
-		static SLSize vehicleIdx(0);
+		static SLSize vehicleIdx(0); //counting how many tanks we've created
 
-		// to create the local player replica
-		CCDictionary* constructionDictionary(createTankCreationDictionary(vehicleIdx));
-
-		++vehicleIdx;
-		if(vehicleIdx == 4)	{
-			vehicleIdx = 0;
-		}
+		CCDictionary* constructionDictionary(createTankCreationDictionary(vehicleIdx % 4)); //create the dictionary for tank 0-3
+		constructionDictionary->setObject(CCString::createWithFormat("%d", ++vehicleIdx), "name"); //assign the player name (dummy for now)
 		return constructionDictionary;
 	}
 

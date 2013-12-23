@@ -41,7 +41,7 @@ namespace nl	{
 		CCLabelTTF* _labelInfo;
 		const char * _labelText;
 		void setKillCount(int newKillCount);
-		
+		CCString *_playerName;
 
 		virtual void preSerialize() SL_OVERRIDE;
 

@@ -92,6 +92,7 @@ namespace nl	{
 		//SL_SYNTHESIZE(CCArray*, _spectators, Spectators);
 		
 		CCArray *_spectators; //this list provides the order of which spectator becomes active next
+		unsigned int _totalPlayers;
 
 	private:
 

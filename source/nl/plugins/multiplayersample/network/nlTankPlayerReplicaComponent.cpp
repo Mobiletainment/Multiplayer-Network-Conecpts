@@ -48,8 +48,6 @@ namespace nl	{
 
 		SLBaseClass::preUpdate(delta);
 
-		
-
 		// pass over the controller values to a controller object
 		_player.accessController()->setActionValue(EControllerAction_Yaw, _ctrlValues._leftRight);
 		_player.accessController()->setActionValue(EControllerAction_Move, _ctrlValues._forwardBackward);
