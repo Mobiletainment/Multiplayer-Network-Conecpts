@@ -26,6 +26,7 @@ namespace nl	{
 		:_tickToReplicate(0)
 		,_tickReplicated(0)
 		,_sampleVehicleState(false)
+		,_killCount(0)
 	{
 		_replica.setName(DynamicActorReplicaComponent::staticClassName());
 
@@ -92,6 +93,8 @@ namespace nl	{
 
 					_actorDatagram._lvx = _localSpaceData._linearVelocity.x;
 					_actorDatagram._lvy = _localSpaceData._linearVelocity.y;
+					
+					_actorDatagram._killCount = _killCount;
 
 					_actorDatagram._avz = _localSpaceData._angularVelocity.z;
 				}

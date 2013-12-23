@@ -29,7 +29,6 @@ namespace nl	{
 		,_tankReplicaComponent(nullptr)
 		,_tankActorNode(nullptr)
 		,_lastControlledReplicaNetworkId(RakNet::UNASSIGNED_NETWORK_ID)
-		,_labelKillCount(nullptr)
 	{
 		_replica.setName(TankPlayerReplicaComponent::staticClassName());
 
@@ -56,10 +55,6 @@ namespace nl	{
 		_player.accessController()->setActionValue(EControllerAction_Move, _ctrlValues._forwardBackward);
 		_player.accessController()->setActionValue(EControllerAction_Shoot, _ctrlValues._shoot);		
 		
-		if(_ctrlValues._killCount > 1 )
-		{
-			int x = 0;
-		}
 
 		// TODO @student : the tank replica component property on the client is null
 		//                 you can replicate the played replica networkid (which is done anyways already)
@@ -94,9 +89,6 @@ namespace nl	{
 			// once you've got here the player needs to play
 			if(getTankReplicaComponent() != nullptr)
 			{
-				getTankReplicaComponent()->setKillCount(_ctrlValues._killCount);
-				
-
 				if(getTankReplicaComponent()->getActorSprite() != nullptr)
 				{
 					AbstractVehicle* vehicle(getTankReplicaComponent()->getActorSprite()->getVehicle());
@@ -112,17 +104,6 @@ namespace nl	{
 
 	}
 
-	void TankPlayerReplicaComponent::increaseKillCount()
-	{
-		//if(_ctrlValues._killCount < 60)
-
-		_ctrlValues._killCount = _ctrlValues._killCount + 1;
-		
-		//_player.accessController()->setActionValue(EControllerAction_Count, _ctrlValues._killCount);
-
-		
-	}
-
 	// postUpdate will always be called once per frame
 	void TankPlayerReplicaComponent::postUpdate( float delta )
 	{
@@ -132,6 +113,8 @@ namespace nl	{
 		}
 		else	{
 			if (getTopology()==CLIENT)	{
+				
+			
 			}
 			else if (getTopology()==SERVER)
 			{

@@ -30,7 +30,6 @@ namespace nl	{
 			_ctrlValues._leftRight =
 			_ctrlValues._shoot = 0.0f;
 		_ctrlValues._controlledReplicaNetworkId = UNASSIGNED_NETWORK_ID;
-		_ctrlValues._killCount = 0;
 	}
 
 	PlayerReplicaComponent::~PlayerReplicaComponent()	{
@@ -83,7 +82,6 @@ namespace nl	{
 		comValues._forwardBackward	=	TCompressedFixpoint<float,char,8>::writeCompress(_ctrlValues._forwardBackward	, -1.0f, 1.0f );
 		comValues._leftRight		=	TCompressedFixpoint<float,char,8>::writeCompress(_ctrlValues._leftRight			, -1.0f, 1.0f );
 		comValues._shoot			=	TCompressedFixpoint<float,char,8>::writeCompress(_ctrlValues._shoot				, -1.0f, 1.0f );
-		comValues._killCount		=	_ctrlValues._killCount;
 
 		comValues._updateTick = _ctrlValues._updateTick;
 		comValues._controlledReplicaNetworkId = _ctrlValues._controlledReplicaNetworkId;
@@ -113,19 +111,17 @@ namespace nl	{
 		_ctrlValues._forwardBackward			=TCompressedFixpoint<float,char,8>::readInflate(comValues._forwardBackward				, -1.0f, 1.0f );
 		_ctrlValues._leftRight					=TCompressedFixpoint<float,char,8>::readInflate(comValues._leftRight					, -1.0f, 1.0f );
 		_ctrlValues._shoot						=TCompressedFixpoint<float,char,8>::readInflate(comValues._shoot						, -1.0f, 1.0f );
-		_ctrlValues._killCount					=comValues._killCount;
 		_ctrlValues._updateTick = comValues._updateTick;
 		_ctrlValues._controlledReplicaNetworkId =comValues._controlledReplicaNetworkId;
 		
 		//OLD:
 		//bitStream.ReadAlignedBytes( (unsigned char *)&_ctrlValues, sizeof(ControllerValues) );
-#if 1
+#if 0
 		if(_ctrlValues._leftRight != 0.0f)	{
-		_replica.getPeer()->log(ELogType_Status, "lr(%.02f) fb(%.02f) fire(%.02f) killCount(%0.02f)", 
+		_replica.getPeer()->log(ELogType_Status, "lr(%.02f) fb(%.02f) fire(%.02f)", 
 			_ctrlValues._leftRight, 
 			_ctrlValues._forwardBackward, 
-			_ctrlValues._shoot,
-			_ctrlValues._killCount);
+			_ctrlValues._shoot);
 		}
 #endif
 	}

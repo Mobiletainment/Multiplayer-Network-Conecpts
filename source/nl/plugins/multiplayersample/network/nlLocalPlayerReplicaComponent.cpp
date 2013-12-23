@@ -75,13 +75,7 @@ namespace nl	{
 			_ctrlValues._leftRight = controller->getActionValue(EControllerAction_Yaw);
 			_ctrlValues._forwardBackward = controller->getActionValue(EControllerAction_Move);
 			_ctrlValues._shoot = controller->getActionValue(EControllerAction_Shoot);
-			//_ctrlValues._killCount = controller->getActionValue(EControllerAction_Count);
 			
-
-			if (_ctrlValues._killCount > 1)
-			{
-				int x = 0;
-			}
 #endif
 		}
 		else if(getTopology() == SERVER)	{

@@ -34,12 +34,19 @@ namespace nl	{
 		void increaseKillCount();
 		void setKillCount(int killCount);
 
+		virtual void preSerialize() SL_OVERRIDE;
+
+		virtual RakNet::RM3SerializationResult serialize(RakNet::SerializeParameters *serializeParameters) SL_OVERRIDE;
+		virtual void deserialize(RakNet::DeserializeParameters *deserializeParameters) SL_OVERRIDE;
+
 	protected:
 		TankReplicaComponent();
 		virtual ~TankReplicaComponent();
 		CCLabelTTF* _labelKillCount;
-		int _killCount;
+		CCLabelTTF* _labelName;
 
+		SL_SYNTHESIZE(CCString *, _tankName, TankName);
+		
 	private:
 	};
 

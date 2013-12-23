@@ -110,11 +110,10 @@ namespace nl	{
 				}
 
 				setLocalPlayerReplicaComponent(replicaComponent);
-				
+				//localPlayerReplica->setName("David");
 				// now we might want to set a little data to this replica ...
 				// like a name etc.
 				// or provide a construction dictionary
-				
 				
 			}
 		}

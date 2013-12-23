@@ -25,7 +25,6 @@ namespace nl	{
 		float _leftRight;
 		float _forwardBackward;
 		float _shoot;
-		unsigned int _killCount;
 		RakNet::NetworkID _controlledReplicaNetworkId;
 		SLSize _updateTick;
 	} ControllerValues;
@@ -34,7 +33,6 @@ namespace nl	{
 		char _leftRight;
 		char _forwardBackward;
 		char _shoot;
-		unsigned int _killCount;
 		SLSize _updateTick;
 		RakNet::NetworkID _controlledReplicaNetworkId;
 	} Compressed_ControllerValues;
@@ -47,6 +45,7 @@ namespace nl	{
 		float _lvx;
 		float _lvy;
 		float _avz;
+		unsigned int _killCount;
 		SLSize _updateTick;
 	} Dynamic2DActorDatagram;
 
@@ -60,6 +59,7 @@ namespace nl	{
 		float _fx;
 		float _fy;
 		float _avz;
+		unsigned int _killCount;
 	} Compressed_Dynamic2DActorDatagram;
 
 

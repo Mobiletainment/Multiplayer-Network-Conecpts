@@ -68,8 +68,6 @@ namespace nl	{
 						TankPlayerReplicaComponent* replicaComponent = getComponentFromActorNode<TankPlayerReplicaComponent>(actorNode);
 						if(replicaComponent != nullptr)
 						{
-							replicaComponent->increaseKillCount();
-							
 							//if we already have e.g. 4 active players, set the further players to spectator mode
 							if (activePlayers >= PLAYER_LIMIT)
 								replicaComponent->setSpectatorMode(true);

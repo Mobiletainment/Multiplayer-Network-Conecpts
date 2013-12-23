@@ -62,6 +62,7 @@ namespace nl	{
 		SLSize _tickSerialized;
 		bool _sampleVehicleState;
 
+		unsigned int _killCount;
 
 	private:
 	};
