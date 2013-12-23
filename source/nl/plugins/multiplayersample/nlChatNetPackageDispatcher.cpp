@@ -40,14 +40,15 @@ namespace nl
 		_ctrlChatText->setText("\n");
 		ControlUtils::addCtrlNode(_ctrlChatText, parentLayer);
 		*/
-
-		CCSize preferredSize = CCSizeMake(parentLayer->getPreferredSize().width,0.0f);
-		CCSize maxSize = CCSizeMake(parentLayer->getPreferredSize().width, 60.0f);
-		_ctrlChatText = ControlUtils::createValueBox(nullptr, maxSize);
-		_ctrlChatText->setText("\n");
-		_ctrlChatText->setPositionY(30.0f);
+		
+		CCSize btnSize = CCSizeMake(parentLayer->getContentSize().width, 60);
+		CCSize maxSize = CCSizeMake(parentLayer->getContentSize().width, 60.0f);
+		_ctrlChatText = ControlUtils::createValueBox(nullptr, btnSize);
+		_ctrlChatText->setText("No Message from other Clients");
+		_ctrlChatText->setPositionY(75.0f);
 		_ctrlChatText->setMaxSize(maxSize);
 		ControlUtils::addCtrlNode(_ctrlChatText, parentLayer);
+		
 	}
 
 	void ChatNetPackageDispatcher::addChatMessage( const ChatMessage& newMessage )
@@ -56,18 +57,14 @@ namespace nl
 		size_t count(_chatMessages.size());
 		std::ostringstream allMessages;
 
-		for(size_t i(0); i < count; ++i)
-		{
-			const ChatMessage& message(_chatMessages.elementAt(i));
-			allMessages << message._sender.c_str() << " : " << message._content.c_str();
-
-			if(i < count - 1)
-			{
-				allMessages << std::endl;
-			}
-		}
+		//for(size_t i(0); i < count; ++i)
+		//{
+		const ChatMessage& message(_chatMessages.elementAt(count - 1));
+		allMessages << message._sender.c_str() << " : " << message._content.c_str();
+		//}
 
 		_ctrlChatText->setText(allMessages.str().c_str());
+		
 		CCControlBase* parentCtrl(dynamic_cast<CCControlBase*>(_ctrlChatText->getParent()));
 		
 		if(parentCtrl)
@@ -441,7 +438,7 @@ namespace nl
 		{
 		case SL_CTRLID_REGISTER:
 			{
-				getPeer()->log(ELogType_Info, "yyyy");
+				getPeer()->log(ELogType_Info, "Registering");
 			}
 			break;
 		}
@@ -502,10 +499,15 @@ namespace nl
 		parentLayer->addChild(ctrlContainer);
 		// Kristian Added End
 
+		
 		// Kristian Added Start - This part adds a message edit box
 		CCSize msgSize = CCSizeMake(anSize.width, 0);
-		_ctrlMessage = ControlUtils::createEditBox("Message:", msgSize);
+		_ctrlMessage = ControlUtils::createEditBox("Message:", btnSize);
+		
+		_ctrlMessage->setPositionY(110);
 		parentLayer->addChild(_ctrlMessage);
+
+		
 		// Kristian Added End
 	}
 

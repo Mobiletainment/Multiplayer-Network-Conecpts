@@ -74,7 +74,7 @@ namespace nl	{
 	// client / receive code
 	void TankProjectileReplicaComponent::deserialize(RakNet::DeserializeParameters *deserializeParameters)
 	{
-		SL_ASSERT("Error: Deserializing TankProjectileReplica. Something went wrong, because no serialization of ProjectileReplicas is necessary!");
+		SL_ASSERT("Error: Deserializing TankProjectileReplica. Something went wrong, because serialization/deserialization of TankProjectileReplica should not be triggered!");
 	}
 }
 
